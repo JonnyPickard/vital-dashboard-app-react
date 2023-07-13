@@ -27,3 +27,13 @@ See [Task Spec](./TASK.md) for more information.
 ### List Panels
 
 - Design a list of Panels (Can potentially reuse most of the Biomarker-test lists?).
+
+## Testing
+
+Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+
+```sh
+  # run unit tests
+
+  npm test
+```
