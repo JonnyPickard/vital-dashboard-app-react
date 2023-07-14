@@ -37,3 +37,17 @@ Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Librar
 
   npm test
 ```
+
+## 3rd Party Libraries
+
+### [Vite](https://vitejs.dev/)
+
+JavaScript build tool (similar to Webpack) that leverages widely supported modern browser features like ES Modules to dramatically simplify and speed up the build & development processes.
+
+**Reasoning**: Vite appears to be a lot faster and easier to use than Webpack with a lot less configuration required & much faster compilation speeds.
+
+### [React-Query](https://www.npmjs.com/package/@tanstack/react-query)
+
+Async state management & data fetching.
+
+**Reasoning**: Has easy to use handlers for most of the different scenarios during data fetching e.g. retries, caching, request cancellation, pagination & infinite scroll.
