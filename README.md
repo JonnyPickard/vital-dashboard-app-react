@@ -12,6 +12,7 @@ See [Task Spec](./TASK.md) for more information.
 
 - API GET req `/v3/lab_tests`.
   - No pagination required.
+  - Need to setup a localhost server proxy to avoid cors issues.
 - List all results (Virtualised Table?).
 - Search Filter functionality (Fuzzy search via name?).
 - Pill Button Filters For Labs?
