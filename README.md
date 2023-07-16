@@ -6,9 +6,26 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
-## Rough Plan
+## Rough Plan 2
+
+- Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
+- New Panel Form
+  - Field 1.
+    - Name: Name
+    - Component: Input
+  - Field 2.
+    - Name: Collection Type
+    - Component: Select
+  - Field 3.
+    - Name: Select Tests
+    - Component: Test Catalog Table
+      - w/ Search + Filters + Add to Panel CTA Button
+
+## Rough Plan 1
 
 ### List All Available Biomarker-tests
+
+#### Steps
 
 - API GET req `/v3/lab_tests`.
   - No pagination required.
@@ -30,7 +47,15 @@ See [Task Spec](./TASK.md) for more information.
 
 - Design a list of Panels (Can potentially reuse most of the Biomarker-test lists?).
 
-## Testing
+## Designs
+
+Use a mobile first data table with sticky search/ filters at bottom
+
+- [Mobile Tables](https://css-tricks.com/responsive-data-tables/)
+
+## Usage
+
+### Testing
 
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
