@@ -1,12 +1,10 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Heading, Button, Divider, Box } from "@chakra-ui/react";
 
 const { VITE_VITAL_LABS_API_KEY } = import.meta.env;
 
 export const APP_NAME = "Vital";
 
-function fetchLabsData(apiKey: string) {
+function fetchTestableBiomarkers(apiKey: string) {
   fetch("/api", {
     cache: "no-cache",
     headers: {
@@ -20,31 +18,21 @@ function fetchLabsData(apiKey: string) {
 }
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>Vital</h1>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => fetchLabsData(VITE_VITAL_LABS_API_KEY)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Heading as="h2" fontSize="2xl" fontWeight="semibold">
+        Create Panel
+      </Heading>
+
+      <Divider />
+
+      <Box padding="10">
+        <Button
+          onClick={() => fetchTestableBiomarkers(VITE_VITAL_LABS_API_KEY)}
+        >
+          Fetch Biomarkers List
+        </Button>
+      </Box>
     </>
   );
 }
