@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Heading,
   Button,
@@ -18,6 +18,24 @@ function NewPanel() {
     LabsResponseData["markers"] | []
   >([]);
 
+  // TODO: Switch out for React-Query
+  // TODO: Add states for Loading + Failure to load
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const testableBiomarkers = await fetchTestableBiomarkers();
+
+        if (testableBiomarkers && testableBiomarkers.markers) {
+          setTestableBiomarkersList(testableBiomarkers.markers);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchData().catch(console.error);
+  }, []);
+
   return (
     <>
       <Heading as="h2" fontSize="2xl" fontWeight="semibold">
@@ -27,24 +45,19 @@ function NewPanel() {
       <Divider />
 
       <Box padding="10">
-        <Button
-          onClick={() => {
-            fetchTestableBiomarkers()
-              .then((response) => {
-                if (response && response.markers) {
-                  setTestableBiomarkersList(response.markers);
-                }
-              })
-              .catch(console.error);
-          }}
-        >
-          Fetch Biomarkers List
-        </Button>
         <UnorderedList>
           {testableBiomarkersList.map((marker) => (
             <ListItem key={marker.id}>{marker.name}</ListItem>
           ))}
         </UnorderedList>
+
+        <Button
+          onClick={() => {
+            console.log("clicked");
+          }}
+        >
+          Save Panel
+        </Button>
       </Box>
     </>
   );
