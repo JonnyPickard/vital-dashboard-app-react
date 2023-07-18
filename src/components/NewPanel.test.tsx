@@ -12,7 +12,7 @@ vi.mock("../services/fetchTestableBiomarkers", () => ({
 
 describe("NewPanel", () => {
   it("renders the heading with the correct title", () => {
-    console.log(fetchTestableBiomarkers());
+    // console.log(fetchTestableBiomarkers());
     render(<NewPanel />);
     const heading = screen.getByRole("heading", {
       level: 1,

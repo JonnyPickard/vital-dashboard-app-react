@@ -11,7 +11,6 @@ import {
 import type { LabsResponseData } from "../types/labs-response-data";
 
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
-
 export const NEW_PANEL_NAME = "Create Panel";
 
 function NewPanel() {
