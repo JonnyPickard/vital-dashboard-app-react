@@ -1,19 +1,27 @@
 import { useState, useEffect } from "react";
 import {
-  Heading,
   Button,
-  Divider,
   Box,
+  Flex,
   UnorderedList,
   ListItem,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 
 import type { LabsResponseData } from "../types/labs-response-data";
 
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
-export const NEW_PANEL_NAME = "Create Panel";
 
-function NewPanel() {
+import { PageHeader } from "./PageHeader";
+
+export const NEW_PANEL_NAME = "Create Panel";
+export const NEW_PANEL_SUBTITLE =
+  "Create a new panel of lab tests available for ordering to your team.";
+
+export function NewPanel() {
   const [testableBiomarkersList, setTestableBiomarkersList] = useState<
     LabsResponseData["markers"] | []
   >([]);
@@ -37,14 +45,13 @@ function NewPanel() {
   }, []);
 
   return (
-    <>
-      <Heading as="h2" fontSize="2xl" fontWeight="semibold">
-        {NEW_PANEL_NAME}
-      </Heading>
+    <Box padding="4">
+      <PageHeader
+        headingText={NEW_PANEL_NAME}
+        subtitleText={NEW_PANEL_SUBTITLE}
+      />
 
-      <Divider />
-
-      <Box padding="10">
+      <Box padding="4">
         <UnorderedList>
           {testableBiomarkersList.map((marker) => (
             <ListItem key={marker.id}>{marker.name}</ListItem>
@@ -59,8 +66,6 @@ function NewPanel() {
           Save Panel
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }
-
-export default NewPanel;
