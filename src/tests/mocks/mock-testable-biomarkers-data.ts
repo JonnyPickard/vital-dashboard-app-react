@@ -1,26 +1,10 @@
-// TODO move to types folder
-type LabResponseData = {
-  markers: {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    lab_id: number;
-    provider_id: string;
-    type: null;
-    unit: null;
-    price: string;
-  }[];
-  total: number;
-  page: number;
-  size: number;
-};
+import type { LabsResponseData } from "../../types/labs-response-data";
 
 /**
  * Example response data when requesting ALL available, testable biomarkers from:
  * https://api.sandbox.eu.tryvital.io/v3/lab_tests
  */
-export const testableBiomarkersMockData: LabResponseData = {
+export const testableBiomarkersMockData: LabsResponseData = {
   markers: [
     {
       id: 1,
