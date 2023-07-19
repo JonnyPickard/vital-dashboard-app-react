@@ -1,6 +1,7 @@
-const { VITE_VITAL_LABS_API_KEY, DEV } = import.meta.env;
-import type { LabsResponseData } from "../types/labs-response-data";
 import { testableBiomarkersMockData } from "../tests/mocks/mock-testable-biomarkers-data.ts";
+import type { LabsResponseData } from "../types/labs-response-data";
+
+const { VITE_VITAL_LABS_API_KEY, DEV } = import.meta.env;
 
 // TODO: Probably don't want a dev toggle here
 export const fetchTestableBiomarkers = DEV

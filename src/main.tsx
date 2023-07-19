@@ -1,8 +1,9 @@
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { theme } from "./theme.ts";
+
 import { NewPanel } from "./components/NewPanel.tsx";
+import { theme } from "./theme.ts";
 
 const extendedTheme = extendTheme(theme);
 
@@ -11,5 +12,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ChakraProvider theme={extendedTheme}>
       <NewPanel />
     </ChakraProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

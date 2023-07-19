@@ -1,11 +1,11 @@
 import {
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 
 import type { LabsResponseData } from "../types/labs-response-data";

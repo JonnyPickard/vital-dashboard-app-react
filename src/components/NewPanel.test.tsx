@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
 import { act } from "react-dom/test-utils";
+import { vi } from "vitest";
 
-import { NewPanel, NEW_PANEL_NAME } from "./NewPanel";
-import { testableBiomarkersMockData } from "../tests/mocks/mock-testable-biomarkers-data.ts";
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
+import { testableBiomarkersMockData } from "../tests/mocks/mock-testable-biomarkers-data.ts";
+import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
 
 vi.mock("../services/fetchTestableBiomarkers", () => ({
   fetchTestableBiomarkers: vi
