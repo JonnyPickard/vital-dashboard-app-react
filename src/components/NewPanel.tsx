@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Button,
   Box,
-  Flex,
+  Input,
+  Select,
   UnorderedList,
   ListItem,
   FormControl,
@@ -11,20 +13,35 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 
-import type { LabsResponseData } from "../types/labs-response-data";
-
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
-
 import { PageHeader } from "./PageHeader";
+
+import type { LabsResponseData } from "../types/labs-response-data";
 
 export const NEW_PANEL_NAME = "Create Panel";
 export const NEW_PANEL_SUBTITLE =
   "Create a new panel of lab tests available for ordering to your team.";
 
+type FormValues = {
+  panelName: string;
+  collectionMethod: string;
+};
+
 export function NewPanel() {
   const [testableBiomarkersList, setTestableBiomarkersList] = useState<
     LabsResponseData["markers"] | []
   >([]);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors /* isSubmitting */ },
+  } = useForm<FormValues>();
+
+  const onSubmit = (data: FormValues) => {
+    console.log("errors", errors);
+    console.log("data", data);
+  };
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
@@ -52,19 +69,58 @@ export function NewPanel() {
       />
 
       <Box padding="4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl marginBottom="4" isInvalid={Boolean(errors.panelName)}>
+            <FormErrorMessage>
+              {errors.panelName && errors.panelName.message}
+            </FormErrorMessage>
+            <FormLabel>Panel Name</FormLabel>
+            <Input
+              type="text"
+              {...register("panelName", {
+                required: "Panel Name is required.",
+                minLength: {
+                  value: 4,
+                  message: "Panel Name must be at least 4 characters.",
+                },
+              })}
+            />
+            <FormHelperText>
+              What you would like to call the new Panel.
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl
+            marginBottom="4"
+            isInvalid={Boolean(errors.collectionMethod)}
+          >
+            <FormErrorMessage>
+              {errors.collectionMethod && errors.collectionMethod.message}
+            </FormErrorMessage>
+            <FormLabel>Collection Method</FormLabel>
+            <Select
+              placeholder="Select option"
+              {...register("collectionMethod", {
+                required: "Collection Method is required.",
+              })}
+            >
+              <option value="test-kit">Test Kit</option>
+              <option value="at-home-phlebotomy">At Home Phlebotomy</option>
+            </Select>
+            <FormHelperText>
+              Which test collection methodology you would like to use for the
+              Panel.
+            </FormHelperText>
+          </FormControl>
+
+          <Button type="submit">Save Panel</Button>
+        </form>
+
         <UnorderedList>
           {testableBiomarkersList.map((marker) => (
             <ListItem key={marker.id}>{marker.name}</ListItem>
           ))}
         </UnorderedList>
-
-        <Button
-          onClick={() => {
-            console.log("clicked");
-          }}
-        >
-          Save Panel
-        </Button>
       </Box>
     </Box>
   );

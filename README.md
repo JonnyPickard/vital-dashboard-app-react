@@ -14,7 +14,7 @@ See [Task Spec](./TASK.md) for more information.
     - Name: Name
     - Component: Input
   - Field 2.
-    - Name: Collection Type
+    - Name: Collection Method
     - Component: Select
   - Field 3.
     - Name: Select Tests
@@ -57,6 +57,8 @@ Use a mobile first data table with sticky search/ filters at bottom
 
 ### Testing
 
+<!-- TODO More info on libraries -->
+
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 ```sh
@@ -78,3 +80,11 @@ JavaScript build tool (similar to Webpack) that leverages widely supported moder
 Async state management & data fetching.
 
 **Reasoning**: Has easy to use handlers for most of the different scenarios during data fetching e.g. retries, caching, request cancellation, pagination & infinite scroll.
+
+### Chakra-UI
+
+<!-- TODO -->
+
+### React-Hook-Form
+
+<!-- TODO -->
