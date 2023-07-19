@@ -5,26 +5,16 @@ import {
   Box,
   Input,
   Select,
-  UnorderedList,
-  ListItem,
-  Flex,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   FormControl,
   FormLabel,
   FormErrorMessage,
   FormHelperText,
 } from "@chakra-ui/react";
 
-import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
+import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
+
+import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
 
 import type { LabsResponseData } from "../types/labs-response-data";
 
@@ -85,7 +75,11 @@ export function NewPanel() {
               {errors.panelName && errors.panelName.message}
             </FormErrorMessage>
             <FormLabel>Panel Name</FormLabel>
+            <FormHelperText marginBottom="4">
+              What you would like to call the Panel.
+            </FormHelperText>
             <Input
+              placeholder="e.g. Lipid Panel"
               type="text"
               {...register("panelName", {
                 required: "Panel Name is required.",
@@ -95,9 +89,6 @@ export function NewPanel() {
                 },
               })}
             />
-            <FormHelperText>
-              What you would like to call the new Panel.
-            </FormHelperText>
           </FormControl>
 
           <FormControl
@@ -108,6 +99,9 @@ export function NewPanel() {
               {errors.collectionMethod && errors.collectionMethod.message}
             </FormErrorMessage>
             <FormLabel>Collection Method</FormLabel>
+            <FormHelperText marginBottom="4">
+              The test collection methodology you want to use.
+            </FormHelperText>
             <Select
               placeholder="Select option"
               {...register("collectionMethod", {
@@ -117,41 +111,23 @@ export function NewPanel() {
               <option value="test-kit">Test Kit</option>
               <option value="at-home-phlebotomy">At Home Phlebotomy</option>
             </Select>
-            <FormHelperText>
-              Which test collection methodology you would like to use for the
-              Panel.
+          </FormControl>
+
+          <FormControl
+            marginBottom="4"
+            isInvalid={Boolean(errors.collectionMethod)}
+          >
+            <FormLabel>Available Lab Tests</FormLabel>
+            <FormHelperText marginBottom="4">
+              The lab tests you would like to order.
             </FormHelperText>
+            <BiomarkersTable biomarkersList={testableBiomarkersList} />
           </FormControl>
 
           <Button type="submit" marginBottom="4">
             Save Panel
           </Button>
         </form>
-
-        <TableContainer display="flex" borderRadius="10">
-          <Table variant="simple">
-            <Thead bg="gray.50">
-              <Tr>
-                <Th>NAME</Th>
-                <Th>LAB</Th>
-                <Th>TEST CODE</Th>
-                <Th isNumeric>PRICE</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {testableBiomarkersList.map((marker) => {
-                return (
-                  <Tr key={marker.id}>
-                    <Td>{marker.name}</Td>
-                    <Td>Labcorp ({marker.lab_id})</Td>
-                    <Td>{marker.provider_id}</Td>
-                    <Td isNumeric>{marker.price}</Td>
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
-        </TableContainer>
       </Box>
     </Box>
   );
