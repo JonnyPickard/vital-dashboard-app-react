@@ -7,6 +7,16 @@ import {
   Select,
   UnorderedList,
   ListItem,
+  Flex,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -113,14 +123,35 @@ export function NewPanel() {
             </FormHelperText>
           </FormControl>
 
-          <Button type="submit">Save Panel</Button>
+          <Button type="submit" marginBottom="4">
+            Save Panel
+          </Button>
         </form>
 
-        <UnorderedList>
-          {testableBiomarkersList.map((marker) => (
-            <ListItem key={marker.id}>{marker.name}</ListItem>
-          ))}
-        </UnorderedList>
+        <TableContainer display="flex" borderRadius="10">
+          <Table variant="simple">
+            <Thead bg="gray.50">
+              <Tr>
+                <Th>NAME</Th>
+                <Th>LAB</Th>
+                <Th>TEST CODE</Th>
+                <Th isNumeric>PRICE</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {testableBiomarkersList.map((marker) => {
+                return (
+                  <Tr key={marker.id}>
+                    <Td>{marker.name}</Td>
+                    <Td>Labcorp ({marker.lab_id})</Td>
+                    <Td>{marker.provider_id}</Td>
+                    <Td isNumeric>{marker.price}</Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );

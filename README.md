@@ -6,14 +6,14 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
-## Rough Plan 2
+## Rough Plan
 
 - Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
 - New Panel Form
-  - Field 1.
+  - Field 1.(done)
     - Name: Name
     - Component: Input
-  - Field 2.
+  - Field 2. (done)
     - Name: Collection Method
     - Component: Select
   - Field 3.
@@ -21,33 +21,19 @@ See [Task Spec](./TASK.md) for more information.
     - Component: Test Catalog Table
       - w/ Search + Filters + Add to Panel CTA Button
 
-## Rough Plan 1
+## TODO
 
-### List All Available Biomarker-tests
+- Better Async Fetch For Biomarkers
+- Form tests
+- Searchable Table Of Biomarkers
 
-#### Steps
+## UX/ Designs
 
-- API GET req `/v3/lab_tests`.
-  - No pagination required.
-  - Need to setup a localhost server proxy to avoid cors issues.
-- List all results (Virtualised Table?).
-- Search Filter functionality (Fuzzy search via name?).
-- Pill Button Filters For Labs?
-- List results should have an `Add To Panel` button.
+### Test Catalog Selectable Table
 
-### Panel Creation (Group of Biomarker-test)
+Table with radio buttons
 
-- Client side Data structure for panel data.
-- Design Panels.
-  - Name.
-  - Biomarker collection.
-  - Sampling method ("at home test kit").
-
-### List Panels
-
-- Design a list of Panels (Can potentially reuse most of the Biomarker-test lists?).
-
-## Designs
+- [React Example: Row Selection](https://tanstack.com/table/v8/docs/examples/react/row-selection)
 
 Use a mobile first data table with sticky search/ filters at bottom
 
