@@ -6,6 +6,7 @@ import {
   Th,
   Thead,
   Tr,
+  Checkbox,
 } from "@chakra-ui/react";
 
 import type { LabsResponseData } from "../types/labs-response-data";
@@ -20,6 +21,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
       <Table variant="simple">
         <Thead bg="gray.50">
           <Tr>
+            <Th>SELECTED</Th>
             <Th>NAME</Th>
             <Th>LAB</Th>
             <Th>TEST CODE</Th>
@@ -30,6 +32,9 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
           {biomarkersList.map((marker) => {
             return (
               <Tr key={marker.id}>
+                <Td>
+                  <Checkbox />
+                </Td>
                 <Td>{marker.name}</Td>
                 <Td>Labcorp ({marker.lab_id})</Td>
                 <Td>{marker.provider_id}</Td>

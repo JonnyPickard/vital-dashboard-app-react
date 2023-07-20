@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
 import type { LabsResponseData } from "../types/labs-response-data";
