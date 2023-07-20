@@ -24,13 +24,9 @@ it("renders the heading with the correct title", async () => {
   expect(heading.textContent).toEqual(NEW_PANEL_NAME);
 });
 
-// it("renders the heading with the correct title", () => {
-//   render(<NewPanel />);
+/* 
+  TODO: Behavioural tests for form
 
-//   const heading = screen.getByRole("heading", {
-//     level: 2,
-//     name: NEW_PANEL_NAME,
-//   });
-
-//   expect(heading.textContent).toEqual(NEW_PANEL_NAME);
-// });
+  - Happy path - user fills form and submit
+  - Unhappy path - validation errors
+*/
