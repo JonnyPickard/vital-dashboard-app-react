@@ -8,6 +8,7 @@ import {
   Tr,
   Checkbox,
 } from "@chakra-ui/react";
+import { useFormContext } from "react-hook-form";
 
 import type { LabsResponseData } from "../types/labs-response-data";
 
@@ -16,6 +17,8 @@ interface BiomarkersTableProps {
 }
 
 export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
+  const { register } = useFormContext();
+
   return (
     <TableContainer display="flex" borderRadius="10">
       <Table variant="simple">
@@ -33,7 +36,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
             return (
               <Tr key={marker.id}>
                 <Td>
-                  <Checkbox />
+                  <Checkbox {...register(`biomarkers.${marker.slug}`)} />
                 </Td>
                 <Td>{marker.name}</Td>
                 <Td>Labcorp ({marker.lab_id})</Td>
