@@ -6,6 +6,8 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
+> Note on git - I have left the commit history clean using merge commits so it's easier to understand my working process.
+
 ## Rough Plan
 
 - Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
