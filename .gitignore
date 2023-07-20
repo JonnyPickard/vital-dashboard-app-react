@@ -1,3 +1,7 @@
+.example-data-panels-list.json
+.example-data-test-catalog.json
+docs/
+
 # Logs
 logs
 *.log
@@ -128,3 +132,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+.DS_Store
+.dashboard.css

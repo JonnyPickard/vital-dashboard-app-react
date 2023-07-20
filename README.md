@@ -8,27 +8,42 @@ See [Task Spec](./TASK.md) for more information.
 
 ## Rough Plan
 
-### List All Available Biomarker-tests
+- Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
+- New Panel Form
+  - Field 1.(done)
+    - Name: Name
+    - Component: Input
+  - Field 2. (done)
+    - Name: Collection Method
+    - Component: Select
+  - Field 3.
+    - Name: Select Tests
+    - Component: Test Catalog Table
+      - w/ Search + Filters + Add to Panel CTA Button
 
-- API GET req `/v3/lab_tests`.
-  - No pagination required.
-- List all results.
-- Search Filter functionality (Fuzzy search via name?).
-- List results should have an `Add To Panel` button.
+## TODO
 
-### Panel Creation (Group of Biomarker-test)
+- Better Async Fetch For Biomarkers
+- Form tests
+- Searchable Table Of Biomarkers
 
-- Client side Data structure for panel data.
-- Design Panels.
-  - Name.
-  - Biomarker collection.
-  - Sampling method ("at home test kit").
+## UX/ Designs
 
-### List Panels
+### Test Catalog Selectable Table
 
-- Design a list of Panels (Can potentially reuse most of the Biomarker-test lists?).
+Table with radio buttons
 
-## Testing
+- [React Example: Row Selection](https://tanstack.com/table/v8/docs/examples/react/row-selection)
+
+Use a mobile first data table with sticky search/ filters at bottom
+
+- [Mobile Tables](https://css-tricks.com/responsive-data-tables/)
+
+## Usage
+
+### Testing
+
+<!-- TODO More info on libraries -->
 
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
@@ -51,3 +66,11 @@ JavaScript build tool (similar to Webpack) that leverages widely supported moder
 Async state management & data fetching.
 
 **Reasoning**: Has easy to use handlers for most of the different scenarios during data fetching e.g. retries, caching, request cancellation, pagination & infinite scroll.
+
+### Chakra-UI
+
+<!-- TODO -->
+
+### React-Hook-Form
+
+<!-- TODO -->
