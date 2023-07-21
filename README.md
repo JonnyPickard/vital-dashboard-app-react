@@ -25,12 +25,13 @@ See [Task Spec](./TASK.md) for more information.
 
 ## TODO
 
-- Better Async Fetch For Biomarkers
-- Form tests
-- Searchable Table Of Biomarkers
+### MVP
 
-- MVP todo
+- Table search/ filter by column
+- Form tests
 - Subit form data - save & view panel list
+
+- Better Async Fetch For Biomarkers
 
 ## UX/ Designs
 

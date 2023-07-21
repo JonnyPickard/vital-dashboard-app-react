@@ -16,12 +16,13 @@ import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
 import type { LabsResponseData } from "../types/labs-response-data";
 import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
+import { createNewPanel } from "../services/createNewPanel";
 
 export const NEW_PANEL_NAME = "Create Panel";
 export const NEW_PANEL_SUBTITLE =
   "Create a new panel of lab tests available for ordering to your team.";
 
-type FormValues = {
+export type NewPanelFormValues = {
   panelName: string;
   collectionMethod: string;
   biomarkers: { [name: string]: boolean };
@@ -32,23 +33,14 @@ export function NewPanel() {
     LabsResponseData["markers"] | []
   >([]);
 
-  const methods = useForm<FormValues>();
+  const methods = useForm<NewPanelFormValues>();
 
   const {
     handleSubmit,
     register,
-    formState: { errors /* isSubmitting */ },
+    formState: { errors },
     control,
-    getValues,
   } = methods;
-
-  // TODO: Way to preview and accept saving new panel?
-  const onSubmit = (data: FormValues) => {};
-
-  useEffect(() => {
-    console.log("errors", errors);
-    console.log("data", getValues());
-  });
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
@@ -77,7 +69,7 @@ export function NewPanel() {
 
       <Box padding="4">
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(createNewPanel)}>
             <FormControl marginBottom="6" isInvalid={Boolean(errors.panelName)}>
               <FormLabel>Panel Name</FormLabel>
               <FormHelperText marginBottom="4">
@@ -123,9 +115,7 @@ export function NewPanel() {
 
             <FormControl
               marginBottom="6"
-              // TODO: Validate at least 1 marker selected to add to panel
               isInvalid={Boolean(errors.biomarkers)}
-              // https://stackoverflow.com/questions/61475234/material-ui-react-form-hook-multiple-checkboxes-default-selected#:~:text=changes%20made%20in-,6,-.X%3A
             >
               <FormLabel>Available Lab Tests</FormLabel>
               <FormHelperText marginBottom="4">
