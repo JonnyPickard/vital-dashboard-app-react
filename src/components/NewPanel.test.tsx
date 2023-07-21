@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import { vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 
-import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
+import { act } from "react-dom/test-utils";
+import { vi, Mock } from "vitest";
+
 import { testableBiomarkersMockData } from "../tests/mocks/mock-testable-biomarkers-data.ts";
 import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
+import { createNewPanel } from "../services/createNewPanel";
+
+vi.mock("../services/createNewPanel");
 
 vi.mock("../services/fetchTestableBiomarkers", () => ({
   fetchTestableBiomarkers: vi.fn().mockImplementation(() => ({
@@ -14,7 +18,11 @@ vi.mock("../services/fetchTestableBiomarkers", () => ({
   })),
 }));
 
-it("renders the page heading with the correct title", async () => {
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+test("renders the page heading with the correct title", async () => {
   await act(() => Promise.resolve(render(<NewPanel />)));
 
   const heading = screen.getByRole("heading", {
@@ -25,10 +33,8 @@ it("renders the page heading with the correct title", async () => {
   expect(heading.textContent).toEqual(NEW_PANEL_NAME);
 });
 
-it.only("renders the form with the correct fields", async () => {
+test("renders the form with correct fields & elemments", async () => {
   await act(() => Promise.resolve(render(<NewPanel />)));
-
-  expect("hello").toEqual("hello");
 
   expect(
     screen.getByRole("textbox", { name: /Panel Name/i }),
@@ -53,9 +59,63 @@ it.only("renders the form with the correct fields", async () => {
   ).toBeInTheDocument();
 });
 
-/* 
-  TODO: Behavioural tests for form
+test("should validate form fields are required", async () => {
+  await act(() => Promise.resolve(render(<NewPanel />)));
 
-  - Happy path - user fills form and submit
-  - Unhappy path - validation errors
-*/
+  const submitButton = screen.getByRole("button", { name: /Save Panel/i });
+  await userEvent.click(submitButton);
+
+  expect(screen.getByText(/Panel Name is required./i)).toBeInTheDocument();
+
+  expect(
+    screen.getByText(/Collection Method is required./i),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByText(/You must select at least one test to create a Panel./i),
+  ).toBeInTheDocument();
+
+  expect(createNewPanel).not.toHaveBeenCalled();
+});
+
+test("should validate Panel Name Input is at least 4 characters", async () => {
+  await act(() => Promise.resolve(render(<NewPanel />)));
+
+  const panelNameInput = screen.getByRole("textbox", { name: /Panel Name/i });
+  await userEvent.type(panelNameInput, "a");
+
+  const submitButton = screen.getByRole("button", { name: /Save Panel/i });
+  await userEvent.click(submitButton);
+
+  expect(
+    screen.getByText(/Panel Name must be at least 4 characters./i),
+  ).toBeInTheDocument();
+});
+
+test("should call the submit handler with valid form data", async () => {
+  await act(() => Promise.resolve(render(<NewPanel />)));
+
+  const panelNameInput = screen.getByRole("textbox", { name: /Panel Name/i });
+  await userEvent.type(panelNameInput, "Test");
+
+  const collectionMethodSelect = screen.getByRole("combobox", {
+    name: /Collection Method/i,
+  });
+  await userEvent.selectOptions(collectionMethodSelect, "Test Kit");
+
+  const checkboxes = screen.getAllByRole("checkbox");
+  await userEvent.click(checkboxes[0]);
+
+  const submitButton = screen.getByRole("button", { name: /Save Panel/i });
+  await userEvent.click(submitButton);
+
+  // TODO: Work out how to get haveBeenCallWith working correctly.
+  // eslint-disable-next-line
+  expect((createNewPanel as Mock).mock.calls[0][0]).toEqual(
+    expect.objectContaining({
+      biomarkers: ["17-oh-progesterone-lcms"],
+      collectionMethod: "test-kit",
+      panelName: "Test",
+    }),
+  );
+});
