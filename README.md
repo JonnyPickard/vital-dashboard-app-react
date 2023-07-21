@@ -29,6 +29,9 @@ See [Task Spec](./TASK.md) for more information.
 - Form tests
 - Searchable Table Of Biomarkers
 
+- MVP todo
+- Subit form data - save & view panel list
+
 ## UX/ Designs
 
 ### Test Catalog Selectable Table

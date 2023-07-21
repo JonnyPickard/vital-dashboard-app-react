@@ -24,6 +24,7 @@ export const NEW_PANEL_SUBTITLE =
 type FormValues = {
   panelName: string;
   collectionMethod: string;
+  biomarkers: { [name: string]: boolean };
 };
 
 export function NewPanel() {
@@ -38,12 +39,16 @@ export function NewPanel() {
     register,
     formState: { errors /* isSubmitting */ },
     control,
+    getValues,
   } = methods;
 
-  const onSubmit = (data: FormValues) => {
+  // TODO: Way to preview and accept saving new panel?
+  const onSubmit = (data: FormValues) => {};
+
+  useEffect(() => {
     console.log("errors", errors);
-    console.log("data", data);
-  };
+    console.log("data", getValues());
+  });
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
@@ -73,14 +78,14 @@ export function NewPanel() {
       <Box padding="4">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl marginBottom="4" isInvalid={Boolean(errors.panelName)}>
-              <FormErrorMessage>
-                {errors.panelName && errors.panelName.message}
-              </FormErrorMessage>
+            <FormControl marginBottom="6" isInvalid={Boolean(errors.panelName)}>
               <FormLabel>Panel Name</FormLabel>
               <FormHelperText marginBottom="4">
                 What you would like to call the Panel.
               </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors.panelName && errors.panelName.message}
+              </FormErrorMessage>
               <Input
                 placeholder="e.g. Lipid Panel"
                 type="text"
@@ -95,16 +100,16 @@ export function NewPanel() {
             </FormControl>
 
             <FormControl
-              marginBottom="4"
+              marginBottom="6"
               isInvalid={Boolean(errors.collectionMethod)}
             >
-              <FormErrorMessage>
-                {errors.collectionMethod && errors.collectionMethod.message}
-              </FormErrorMessage>
               <FormLabel>Collection Method</FormLabel>
               <FormHelperText marginBottom="4">
                 The test collection methodology you want to use.
               </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors.collectionMethod && errors.collectionMethod.message}
+              </FormErrorMessage>
               <Select
                 placeholder="Select option"
                 {...register("collectionMethod", {
@@ -117,13 +122,18 @@ export function NewPanel() {
             </FormControl>
 
             <FormControl
-              marginBottom="4"
-              isInvalid={Boolean(errors.collectionMethod)}
+              marginBottom="6"
+              // TODO: Validate at least 1 marker selected to add to panel
+              isInvalid={Boolean(errors.biomarkers)}
+              // https://stackoverflow.com/questions/61475234/material-ui-react-form-hook-multiple-checkboxes-default-selected#:~:text=changes%20made%20in-,6,-.X%3A
             >
               <FormLabel>Available Lab Tests</FormLabel>
               <FormHelperText marginBottom="4">
                 The lab tests you would like to order.
               </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
+              </FormErrorMessage>
               <BiomarkersTable biomarkersList={testableBiomarkersList} />
             </FormControl>
 
