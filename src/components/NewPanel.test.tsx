@@ -119,3 +119,35 @@ test("should call the submit handler with valid form data", async () => {
     }),
   );
 });
+
+test("Show selected toggle button should filter table by selected biomarkers only", async () => {
+  await act(() => Promise.resolve(render(<NewPanel />)));
+
+  expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+
+  await userEvent.click(screen.getAllByRole("checkbox")[0]);
+
+  await userEvent.click(
+    screen.getByRole("button", {
+      name: /Show selected/i,
+    }),
+  );
+
+  expect(screen.getAllByRole("checkbox")).toHaveLength(1);
+
+  expect(
+    screen.queryByRole("button", {
+      name: /Show selected/i,
+    }),
+  ).not.toBeInTheDocument();
+
+  await userEvent.click(screen.getAllByRole("checkbox")[0]);
+
+  await userEvent.click(
+    screen.getByRole("button", {
+      name: /Show all/i,
+    }),
+  );
+
+  expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+});
