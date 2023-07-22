@@ -6,6 +6,8 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
+> Note on git - I have left the commit history clean using merge commits so it's easier to understand my working process.
+
 ## Rough Plan
 
 - Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
@@ -23,9 +25,14 @@ See [Task Spec](./TASK.md) for more information.
 
 ## TODO
 
-- Better Async Fetch For Biomarkers
+### MVP
+
+- Table search/ filter by column
 - Form tests
-- Searchable Table Of Biomarkers
+- Subit form data - save & view panel list
+
+- Better Async Fetch For Biomarkers
+  - Loading + Error state
 
 ## UX/ Designs
 
