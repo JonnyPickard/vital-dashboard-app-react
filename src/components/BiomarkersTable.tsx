@@ -17,10 +17,10 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import type { LabTestsResponseData } from "../types/lab-tests-response-data";
+import type { LabTestsResponseData } from "../types/LabTestsResponseData";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -45,7 +45,11 @@ const columnHelper = createColumnHelper<Biomarker>();
 
 export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const { register } = useFormContext();
+
+  const {
+    register,
+    formState: { isSubmitSuccessful },
+  } = useFormContext();
 
   const columns = useMemo(
     () => [
@@ -103,6 +107,10 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
       selected: selectedFilter,
     },
   });
+
+  useEffect(() => {
+    table.reset();
+  }, [isSubmitSuccessful, table]);
 
   return (
     <>

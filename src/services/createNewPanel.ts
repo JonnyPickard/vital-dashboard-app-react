@@ -1,8 +1,17 @@
-import type { NewPanelFormValues } from "../components/NewPanel";
+import { GlobalState } from "little-state-machine";
 
-// Placeholder for now as there's no existing api route
-export const createNewPanel = async (data: NewPanelFormValues) => {
-  console.log("submitted successfully:", JSON.stringify(data));
+import { ClientSidePanelList, Panel } from "../types/Panel";
 
-  return Promise.resolve(data);
+export const clientSidePanelListStore: ClientSidePanelList = {
+  panels: [],
 };
+
+export function updatePanelsAction(
+  state: GlobalState,
+  payload: Panel,
+): ClientSidePanelList {
+  return {
+    ...state,
+    panels: [payload],
+  };
+}

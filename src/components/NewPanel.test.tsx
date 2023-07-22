@@ -1,16 +1,23 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
-import { Mock, vi } from "vitest";
+import { vi } from "vitest";
 
-import { createNewPanel } from "../services/createNewPanel";
+import { updatePanelsAction } from "../services/createNewPanel.ts";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
 
+vi.mock("little-state-machine", () => ({
+  useStateMachine: vi
+    .fn()
+    .mockImplementation((action: typeof updatePanelsAction) => ({
+      actions: action,
+    })),
+}));
 vi.mock("../services/createNewPanel");
 
-vi.mock("../services/fetchTestableBiomarkers", () => ({
-  fetchTestableBiomarkers: vi
+vi.mock("../services/fetchAllLabTests", () => ({
+  fetchAllLabTests: vi
     .fn()
     .mockImplementation(() => buildLabTestsResponseMockData(3)),
 }));
@@ -72,7 +79,7 @@ test("should validate form fields are required", async () => {
     screen.getByText(/You must select at least one test to create a Panel./i),
   ).toBeInTheDocument();
 
-  expect(createNewPanel).not.toHaveBeenCalled();
+  expect(updatePanelsAction).not.toHaveBeenCalled();
 });
 
 test("should validate Panel Name Input is at least 4 characters", async () => {
@@ -106,9 +113,7 @@ test("should call the submit handler with valid form data", async () => {
   const submitButton = screen.getByRole("button", { name: /Save Panel/i });
   await userEvent.click(submitButton);
 
-  // TODO: Work out how to get haveBeenCallWith working correctly.
-  // eslint-disable-next-line
-  expect((createNewPanel as Mock).mock.calls[0][0]).toEqual(
+  expect(updatePanelsAction).toHaveBeenCalledWith(
     expect.objectContaining({
       biomarkers: ["17-oh-progesterone-lcms"],
       collectionMethod: "test-kit",

@@ -1,11 +1,11 @@
-import { labTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
-import type { LabTestsResponseData } from "../types/lab-tests-response-data";
+import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
+import type { LabTestsResponseData } from "../types/LabTestsResponseData.ts";
 
 const { VITE_VITAL_LABS_API_KEY, DEV } = import.meta.env;
 
 // TODO: Probably don't want a dev toggle here
-export const fetchTestableBiomarkers = DEV
-  ? async () => Promise.resolve(labTestsResponseMockData)
+export const fetchAllLabTests = DEV
+  ? async () => Promise.resolve(buildLabTestsResponseMockData(5))
   : async (): Promise<LabTestsResponseData | null> => {
       try {
         const labsResponseData = await fetch("/api", {

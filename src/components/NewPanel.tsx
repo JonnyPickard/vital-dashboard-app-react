@@ -6,15 +6,24 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
   Select,
 } from "@chakra-ui/react";
-import { DevTool } from "@hookform/devtools";
+import { useStateMachine } from "little-state-machine";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { createNewPanel } from "../services/createNewPanel";
-import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
-import type { LabTestsResponseData } from "../types/lab-tests-response-data";
+import { updatePanelsAction } from "../services/createNewPanel";
+import { fetchAllLabTests } from "../services/fetchAllLabTests";
+import type { LabTestsResponseData } from "../types/LabTestsResponseData";
+import type { Panel } from "../types/Panel";
 import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
 
@@ -22,35 +31,41 @@ export const NEW_PANEL_NAME = "Create Panel";
 export const NEW_PANEL_SUBTITLE =
   "Create a new panel of lab tests available for ordering to your team.";
 
-export type NewPanelFormValues = {
-  panelName: string;
-  collectionMethod: string;
-  biomarkers: { [name: string]: boolean };
+const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
 };
 
 export function NewPanel() {
-  const [testableBiomarkersList, setTestableBiomarkersList] = useState<
+  const { actions } = useStateMachine({ updatePanelsAction });
+
+  const [labTestsList, setLabTestsList] = useState<
     LabTestsResponseData["markers"] | []
   >([]);
 
-  const methods = useForm<NewPanelFormValues>();
+  const methods = useForm<Panel>();
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
-    control,
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = methods;
+
+  const onSubmit = (data: Panel) => {
+    actions.updatePanelsAction(data);
+  };
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
   useEffect(() => {
     async function fetchData() {
       try {
-        const testableBiomarkers = await fetchTestableBiomarkers();
+        const labTests = await fetchAllLabTests();
 
-        if (testableBiomarkers && testableBiomarkers.markers) {
-          setTestableBiomarkersList(testableBiomarkers.markers);
+        if (labTests && labTests.markers) {
+          setLabTestsList(labTests.markers);
         }
       } catch (err) {
         console.error(err);
@@ -66,10 +81,12 @@ export function NewPanel() {
         headingText={NEW_PANEL_NAME}
         subtitleText={NEW_PANEL_SUBTITLE}
       />
-
       <Box padding="4">
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(createNewPanel)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={(e) => preventEnterSubmit(e)}
+          >
             <FormControl marginBottom="6" isInvalid={Boolean(errors.panelName)}>
               <FormLabel>Panel Name</FormLabel>
               <FormHelperText marginBottom="4">
@@ -124,16 +141,42 @@ export function NewPanel() {
               <FormErrorMessage marginBottom="3">
                 {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
               </FormErrorMessage>
-              <BiomarkersTable biomarkersList={testableBiomarkersList} />
+              <BiomarkersTable biomarkersList={labTestsList} />
             </FormControl>
 
-            <Button type="submit" marginBottom="4">
-              Save Panel
-            </Button>
+            {/* TODO:
+              - Close resets form to add more
+                - Might be easiest with routing?
+              - Go to panels list CTA
+            */}
+            <Popover isOpen={isSubmitSuccessful}>
+              <PopoverTrigger>
+                <Button type="submit" marginBottom="4">
+                  Save Panel
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverHeader
+                  display="flex"
+                  justifyContent="center"
+                  fontWeight="semibold"
+                >
+                  Panel Saved!
+                </PopoverHeader>
+                <PopoverArrow />
+                <PopoverBody display="flex" justifyContent="center">
+                  {/* TODO: For now just link to reset page? */}
+                  <Button colorScheme="green" onClick={() => reset()}>
+                    Create Another?
+                  </Button>
+                </PopoverBody>
+                <PopoverFooter display="flex" justifyContent="center">
+                  <Link>Go to Panels?</Link>
+                </PopoverFooter>
+              </PopoverContent>
+            </Popover>
           </form>
         </FormProvider>
-        {/* TODO: Remove this or add a Toggle for dev/ production */}
-        <DevTool control={control} />
       </Box>
     </Box>
   );

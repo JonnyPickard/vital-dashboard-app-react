@@ -1,7 +1,7 @@
-import type { LabTestsResponseData } from "../../types/lab-tests-response-data";
+import type { LabTestsResponseData } from "../../types/LabTestsResponseData";
 
 /**
- *buildLabTestsResponseMockData
+ * buildLabTestsResponseMockData
  * @param amount The amount of lab tests the response should contain
  * @returns {LabTestsResponseData}
  */
