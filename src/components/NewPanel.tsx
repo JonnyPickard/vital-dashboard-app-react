@@ -8,15 +8,15 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
+import { createNewPanel } from "../services/createNewPanel";
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
 import type { LabTestsResponseData } from "../types/lab-tests-response-data";
 import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
-import { createNewPanel } from "../services/createNewPanel";
 
 export const NEW_PANEL_NAME = "Create Panel";
 export const NEW_PANEL_SUBTITLE =

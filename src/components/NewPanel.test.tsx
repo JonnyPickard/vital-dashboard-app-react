@@ -1,12 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
 import { act } from "react-dom/test-utils";
-import { vi, Mock } from "vitest";
+import { Mock, vi } from "vitest";
 
+import { createNewPanel } from "../services/createNewPanel";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
-import { createNewPanel } from "../services/createNewPanel";
 
 vi.mock("../services/createNewPanel");
 

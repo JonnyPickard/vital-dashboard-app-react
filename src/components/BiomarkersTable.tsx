@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
 import {
+  Button,
+  Checkbox,
   Table,
   TableContainer,
   Tbody,
@@ -7,21 +8,19 @@ import {
   Th,
   Thead,
   Tr,
-  Checkbox,
-  Button,
 } from "@chakra-ui/react";
+import {
+  FilterFn,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { LabTestsResponseData } from "../types/lab-tests-response-data";
-
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  flexRender,
-  FilterFn,
-} from "@tanstack/react-table";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -29,7 +28,7 @@ declare module "@tanstack/table-core" {
   }
 }
 
-// Define your row shape
+// Row Shape
 type Biomarker = {
   slug: string;
   name: string;
@@ -38,11 +37,11 @@ type Biomarker = {
   price: string;
 };
 
-const columnHelper = createColumnHelper<Biomarker>();
-
 interface BiomarkersTableProps {
   biomarkersList: LabTestsResponseData["markers"];
 }
+
+const columnHelper = createColumnHelper<Biomarker>();
 
 export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
   const [globalFilter, setGlobalFilter] = useState("");
