@@ -6,6 +6,12 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Popover,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Select,
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
@@ -23,6 +29,12 @@ export const NEW_PANEL_NAME = "Create Panel";
 export const NEW_PANEL_SUBTITLE =
   "Create a new panel of lab tests available for ordering to your team.";
 
+const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+};
+
 export function NewPanel() {
   const { actions } = useStateMachine({ updatePanelsAction });
 
@@ -35,12 +47,18 @@ export function NewPanel() {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting },
   } = methods;
 
   const onSubmit = (data: Panel) => {
     actions.updatePanelsAction(data);
   };
+
+  // TODO: Remove these just left in for now while I work out submit logic
+  useEffect(() => {
+    console.log("isSubmitted", isSubmitted);
+    console.log("isSubmitting", isSubmitting);
+  }, [isSubmitted, isSubmitting]);
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
@@ -66,81 +84,86 @@ export function NewPanel() {
         headingText={NEW_PANEL_NAME}
         subtitleText={NEW_PANEL_SUBTITLE}
       />
-      {/* TODO: on submit show success message / link to panels? */}
-      {isSubmitSuccessful ? (
-        <h1>Success</h1>
-      ) : (
-        <Box padding="4">
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl
-                marginBottom="6"
-                isInvalid={Boolean(errors.panelName)}
-              >
-                <FormLabel>Panel Name</FormLabel>
-                <FormHelperText marginBottom="4">
-                  What you would like to call the Panel.
-                </FormHelperText>
-                <FormErrorMessage marginBottom="3">
-                  {errors.panelName && errors.panelName.message}
-                </FormErrorMessage>
-                <Input
-                  placeholder="e.g. Lipid Panel"
-                  type="text"
-                  {...register("panelName", {
-                    required: "Panel Name is required.",
-                    minLength: {
-                      value: 4,
-                      message: "Panel Name must be at least 4 characters.",
-                    },
-                  })}
-                />
-              </FormControl>
+      <Box padding="4">
+        <FormProvider {...methods}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={(e) => preventEnterSubmit(e)}
+          >
+            <FormControl marginBottom="6" isInvalid={Boolean(errors.panelName)}>
+              <FormLabel>Panel Name</FormLabel>
+              <FormHelperText marginBottom="4">
+                What you would like to call the Panel.
+              </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors.panelName && errors.panelName.message}
+              </FormErrorMessage>
+              <Input
+                placeholder="e.g. Lipid Panel"
+                type="text"
+                {...register("panelName", {
+                  required: "Panel Name is required.",
+                  minLength: {
+                    value: 4,
+                    message: "Panel Name must be at least 4 characters.",
+                  },
+                })}
+              />
+            </FormControl>
 
-              <FormControl
-                marginBottom="6"
-                isInvalid={Boolean(errors.collectionMethod)}
+            <FormControl
+              marginBottom="6"
+              isInvalid={Boolean(errors.collectionMethod)}
+            >
+              <FormLabel>Collection Method</FormLabel>
+              <FormHelperText marginBottom="4">
+                The test collection methodology you want to use.
+              </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors.collectionMethod && errors.collectionMethod.message}
+              </FormErrorMessage>
+              <Select
+                placeholder="Select option"
+                {...register("collectionMethod", {
+                  required: "Collection Method is required.",
+                })}
               >
-                <FormLabel>Collection Method</FormLabel>
-                <FormHelperText marginBottom="4">
-                  The test collection methodology you want to use.
-                </FormHelperText>
-                <FormErrorMessage marginBottom="3">
-                  {errors.collectionMethod && errors.collectionMethod.message}
-                </FormErrorMessage>
-                <Select
-                  placeholder="Select option"
-                  {...register("collectionMethod", {
-                    required: "Collection Method is required.",
-                  })}
-                >
-                  <option value="test-kit">Test Kit</option>
-                  <option value="at-home-phlebotomy">At Home Phlebotomy</option>
-                </Select>
-              </FormControl>
+                <option value="test-kit">Test Kit</option>
+                <option value="at-home-phlebotomy">At Home Phlebotomy</option>
+              </Select>
+            </FormControl>
 
-              <FormControl
-                marginBottom="6"
-                isInvalid={Boolean(errors.biomarkers)}
-              >
-                <FormLabel>Available Lab Tests</FormLabel>
-                <FormHelperText marginBottom="4">
-                  The lab tests you would like to order.
-                </FormHelperText>
-                <FormErrorMessage marginBottom="3">
-                  {errors?.biomarkers &&
-                    errors?.biomarkers?.message?.toString()}
-                </FormErrorMessage>
-                <BiomarkersTable biomarkersList={labTestsList} />
-              </FormControl>
+            <FormControl
+              marginBottom="6"
+              isInvalid={Boolean(errors.biomarkers)}
+            >
+              <FormLabel>Available Lab Tests</FormLabel>
+              <FormHelperText marginBottom="4">
+                The lab tests you would like to order.
+              </FormHelperText>
+              <FormErrorMessage marginBottom="3">
+                {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
+              </FormErrorMessage>
+              <BiomarkersTable biomarkersList={labTestsList} />
+            </FormControl>
 
-              <Button type="submit" marginBottom="4">
-                Save Panel
-              </Button>
-            </form>
-          </FormProvider>
-        </Box>
-      )}
+            <Popover isOpen={true}>
+              <PopoverTrigger>
+                <Button type="submit" marginBottom="4">
+                  Save Panel
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverHeader fontWeight="semibold">
+                  Panel Saved!
+                </PopoverHeader>
+                <PopoverArrow />
+                <PopoverCloseButton />
+              </PopoverContent>
+            </Popover>
+          </form>
+        </FormProvider>
+      </Box>
     </Box>
   );
 }
