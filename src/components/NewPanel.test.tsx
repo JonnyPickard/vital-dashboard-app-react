@@ -3,14 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { Mock, vi } from "vitest";
 
-import { createNewPanel } from "../services/createNewPanel";
+import { createNewPanel } from "../services/createNewPanel.ts";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
 
 vi.mock("../services/createNewPanel");
 
-vi.mock("../services/fetchTestableBiomarkers", () => ({
-  fetchTestableBiomarkers: vi
+vi.mock("../services/fetchAllLabTests", () => ({
+  fetchAllLabTests: vi
     .fn()
     .mockImplementation(() => buildLabTestsResponseMockData(3)),
 }));

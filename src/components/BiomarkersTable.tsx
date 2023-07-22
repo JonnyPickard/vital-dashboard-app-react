@@ -20,7 +20,7 @@ import {
 import { useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import type { LabTestsResponseData } from "../types/lab-tests-response-data";
+import type { LabTestsResponseData } from "../types/LabTestsResponseData";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {

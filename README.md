@@ -18,7 +18,7 @@ See [Task Spec](./TASK.md) for more information.
   - Field 2. (done)
     - Name: Collection Method
     - Component: Select
-  - Field 3.
+  - Field 3. (MVP version done)
     - Name: Select Tests
     - Component: Test Catalog Table
       - w/ Search + Filters + Add to Panel CTA Button
