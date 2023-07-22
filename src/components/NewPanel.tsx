@@ -13,7 +13,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 import { fetchTestableBiomarkers } from "../services/fetchTestableBiomarkers";
-import type { LabsResponseData } from "../types/labs-response-data";
+import type { LabTestsResponseData } from "../types/lab-tests-response-data";
 import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
 import { createNewPanel } from "../services/createNewPanel";
@@ -30,7 +30,7 @@ export type NewPanelFormValues = {
 
 export function NewPanel() {
   const [testableBiomarkersList, setTestableBiomarkersList] = useState<
-    LabsResponseData["markers"] | []
+    LabTestsResponseData["markers"] | []
   >([]);
 
   const methods = useForm<NewPanelFormValues>();

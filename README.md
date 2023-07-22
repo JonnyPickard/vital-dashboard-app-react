@@ -32,6 +32,7 @@ See [Task Spec](./TASK.md) for more information.
 - Subit form data - save & view panel list
 
 - Better Async Fetch For Biomarkers
+  - Loading + Error state
 
 ## UX/ Designs
 

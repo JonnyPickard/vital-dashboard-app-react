@@ -1,4 +1,4 @@
-export type LabsResponseData = {
+export type LabTestsResponseData = {
   markers: {
     id: number;
     name: string;

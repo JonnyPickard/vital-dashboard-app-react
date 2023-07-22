@@ -4,18 +4,16 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { vi, Mock } from "vitest";
 
-import { testableBiomarkersMockData } from "../tests/mocks/mock-testable-biomarkers-data.ts";
+import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
 import { createNewPanel } from "../services/createNewPanel";
 
 vi.mock("../services/createNewPanel");
 
 vi.mock("../services/fetchTestableBiomarkers", () => ({
-  fetchTestableBiomarkers: vi.fn().mockImplementation(() => ({
-    ...testableBiomarkersMockData,
-    // TODO: Make a builder instead of this
-    ...{ markers: testableBiomarkersMockData.markers.slice(0, 2) },
-  })),
+  fetchTestableBiomarkers: vi
+    .fn()
+    .mockImplementation(() => buildLabTestsResponseMockData(3)),
 }));
 
 afterEach(() => {

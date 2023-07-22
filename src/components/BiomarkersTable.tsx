@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
 
-import type { LabsResponseData } from "../types/labs-response-data";
+import type { LabTestsResponseData } from "../types/lab-tests-response-data";
 
 import {
   createColumnHelper,
@@ -41,7 +41,7 @@ type Biomarker = {
 const columnHelper = createColumnHelper<Biomarker>();
 
 interface BiomarkersTableProps {
-  biomarkersList: LabsResponseData["markers"];
+  biomarkersList: LabTestsResponseData["markers"];
 }
 
 export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {

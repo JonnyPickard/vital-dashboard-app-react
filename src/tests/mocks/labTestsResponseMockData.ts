@@ -1,10 +1,30 @@
-import type { LabsResponseData } from "../../types/labs-response-data";
+import type { LabTestsResponseData } from "../../types/lab-tests-response-data";
+
+/**
+ *buildLabTestsResponseMockData
+ * @param amount The amount of lab tests the response should contain
+ * @returns {LabTestsResponseData}
+ */
+export const buildLabTestsResponseMockData = (
+  amount: number,
+): LabTestsResponseData => {
+  if (amount > 50 || amount <= 0) {
+    throw new Error("amount must be between 1...50");
+  }
+
+  return {
+    markers: [...labTestsResponseMockData.markers.slice(0, amount - 1)],
+    total: amount,
+    page: 1,
+    size: amount,
+  };
+};
 
 /**
  * Example response data when requesting ALL available, testable biomarkers from:
  * https://api.sandbox.eu.tryvital.io/v3/lab_tests
  */
-export const testableBiomarkersMockData: LabsResponseData = {
+export const labTestsResponseMockData: LabTestsResponseData = {
   markers: [
     {
       id: 1,
