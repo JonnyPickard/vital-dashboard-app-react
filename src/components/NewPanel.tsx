@@ -6,10 +6,12 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Link,
   Popover,
   PopoverArrow,
-  PopoverCloseButton,
+  PopoverBody,
   PopoverContent,
+  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   Select,
@@ -47,18 +49,13 @@ export function NewPanel() {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting },
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = methods;
 
   const onSubmit = (data: Panel) => {
     actions.updatePanelsAction(data);
   };
-
-  // TODO: Remove these just left in for now while I work out submit logic
-  useEffect(() => {
-    console.log("isSubmitted", isSubmitted);
-    console.log("isSubmitting", isSubmitting);
-  }, [isSubmitted, isSubmitting]);
 
   // TODO: Switch out for React-Query
   // TODO: Add states for Loading + Failure to load
@@ -147,18 +144,35 @@ export function NewPanel() {
               <BiomarkersTable biomarkersList={labTestsList} />
             </FormControl>
 
-            <Popover isOpen={true}>
+            {/* TODO:
+              - Close resets form to add more
+                - Might be easiest with routing?
+              - Go to panels list CTA
+            */}
+            <Popover isOpen={isSubmitSuccessful}>
               <PopoverTrigger>
                 <Button type="submit" marginBottom="4">
                   Save Panel
                 </Button>
               </PopoverTrigger>
               <PopoverContent>
-                <PopoverHeader fontWeight="semibold">
+                <PopoverHeader
+                  display="flex"
+                  justifyContent="center"
+                  fontWeight="semibold"
+                >
                   Panel Saved!
                 </PopoverHeader>
                 <PopoverArrow />
-                <PopoverCloseButton />
+                <PopoverBody display="flex" justifyContent="center">
+                  {/* TODO: For now just link to reset page? */}
+                  <Button colorScheme="green" onClick={() => reset()}>
+                    Create Another?
+                  </Button>
+                </PopoverBody>
+                <PopoverFooter display="flex" justifyContent="center">
+                  <Link>Go to Panels?</Link>
+                </PopoverFooter>
               </PopoverContent>
             </Popover>
           </form>
