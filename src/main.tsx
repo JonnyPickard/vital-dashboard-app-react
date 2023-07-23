@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, Link, extendTheme } from "@chakra-ui/react";
 import { StateMachineProvider, createStore } from "little-state-machine";
 import React from "react";
 import ReactDOM from "react-dom/client";
