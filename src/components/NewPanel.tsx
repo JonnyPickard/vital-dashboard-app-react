@@ -15,10 +15,13 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Select,
+  SimpleGrid,
+  Text,
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 import { updatePanelsAction } from "../services/createNewPanel";
 import { fetchAllLabTests } from "../services/fetchAllLabTests";
@@ -49,12 +52,16 @@ export function NewPanel() {
   const {
     handleSubmit,
     register,
-    reset,
+    getValues,
     formState: { errors, isSubmitSuccessful },
   } = methods;
 
   const onSubmit = (data: Panel) => {
-    actions.updatePanelsAction(data);
+    // isSubmitSuccessful = true after onSubmit has completed once
+    // To prevent multiple submits of the same valid form
+    if (!isSubmitSuccessful) {
+      actions.updatePanelsAction(data);
+    }
   };
 
   // TODO: Switch out for React-Query
@@ -87,7 +94,11 @@ export function NewPanel() {
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={(e) => preventEnterSubmit(e)}
           >
-            <FormControl marginBottom="6" isInvalid={Boolean(errors.panelName)}>
+            <FormControl
+              marginBottom="6"
+              isInvalid={Boolean(errors.panelName)}
+              isReadOnly={isSubmitSuccessful}
+            >
               <FormLabel>Panel Name</FormLabel>
               <FormHelperText marginBottom="4">
                 What you would like to call the Panel.
@@ -111,6 +122,7 @@ export function NewPanel() {
             <FormControl
               marginBottom="6"
               isInvalid={Boolean(errors.collectionMethod)}
+              isReadOnly={isSubmitSuccessful}
             >
               <FormLabel>Collection Method</FormLabel>
               <FormHelperText marginBottom="4">
@@ -133,6 +145,7 @@ export function NewPanel() {
             <FormControl
               marginBottom="6"
               isInvalid={Boolean(errors.biomarkers)}
+              isReadOnly={isSubmitSuccessful}
             >
               <FormLabel>Available Lab Tests</FormLabel>
               <FormHelperText marginBottom="4">
@@ -144,11 +157,6 @@ export function NewPanel() {
               <BiomarkersTable biomarkersList={labTestsList} />
             </FormControl>
 
-            {/* TODO:
-              - Close resets form to add more
-                - Might be easiest with routing?
-              - Go to panels list CTA
-            */}
             <Popover isOpen={isSubmitSuccessful}>
               <PopoverTrigger>
                 <Button type="submit" marginBottom="4">
@@ -161,17 +169,40 @@ export function NewPanel() {
                   justifyContent="center"
                   fontWeight="semibold"
                 >
-                  Panel Saved!
+                  Panel Saved
                 </PopoverHeader>
                 <PopoverArrow />
-                <PopoverBody display="flex" justifyContent="center">
-                  {/* TODO: For now just link to reset page? */}
-                  <Button colorScheme="green" onClick={() => reset()}>
-                    Create Another?
-                  </Button>
+                <PopoverBody
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  padding="3"
+                >
+                  <Text fontSize="sm" fontWeight="medium" textAlign="center">
+                    New Panel '{getValues("panelName")}' was created
+                    sucessfully!
+                  </Text>
                 </PopoverBody>
                 <PopoverFooter display="flex" justifyContent="center">
-                  <Link>Go to Panels?</Link>
+                  <SimpleGrid columns={2} spacing="4">
+                    <Link
+                      fontWeight="medium"
+                      color="blue.600"
+                      as={ReactRouterLink}
+                      to="/panels/create"
+                      reloadDocument
+                    >
+                      Create More?
+                    </Link>
+                    <Link
+                      fontWeight="medium"
+                      color="blue.600"
+                      as={ReactRouterLink}
+                      to="/panels"
+                    >
+                      View Panels?
+                    </Link>
+                  </SimpleGrid>
                 </PopoverFooter>
               </PopoverContent>
             </Popover>
