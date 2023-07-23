@@ -27,12 +27,13 @@ See [Task Spec](./TASK.md) for more information.
 
 ### MVP
 
-- Table search/ filter by column
-- Form tests
-- Subit form data - save & view panel list
-
+- Form tests (done)
+- Subit form data & save (done)
+- View panel list
 - Better Async Fetch For Biomarkers
   - Loading + Error state
+- Write up README.md
+- Table search/ filter by column?
 
 ## UX/ Designs
 
