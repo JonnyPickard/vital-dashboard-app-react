@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   server: {
+    open: "/panels/create",
     proxy: {
       "/api": {
         target: "https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers",
