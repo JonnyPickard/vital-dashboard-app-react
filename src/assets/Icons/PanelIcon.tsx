@@ -5,7 +5,6 @@ export const PanelIcon = (props: IconProps) => (
     {...props}
     stroke="currentColor"
     fill="currentColor"
-    stroke-width="0"
     viewBox="0 0 24 24"
     focusable="false"
     height="1em"

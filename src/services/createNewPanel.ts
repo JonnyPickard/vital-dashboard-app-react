@@ -12,6 +12,6 @@ export function updatePanelsAction(
 ): ClientSidePanelList {
   return {
     ...state,
-    panels: [payload],
+    panels: [...state.panels, payload],
   };
 }
