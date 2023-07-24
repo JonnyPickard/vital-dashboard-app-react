@@ -1,11 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
-import { BrowserRouter } from "react-router-dom";
-import { vi } from "vitest";
+import { Mock, vi } from "vitest";
 
 import { NEW_PANEL } from "../constants.ts";
 import { updatePanelsAction } from "../services/createNewPanel.ts";
+import { useLabTests } from "../services/useLabTests.ts";
+import { Wrapper } from "../tests/ProviderWrapper";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NewPanel } from "./NewPanel";
 
@@ -17,21 +18,20 @@ vi.mock("little-state-machine", () => ({
     })),
 }));
 vi.mock("../services/createNewPanel");
+vi.mock("../services/useLabTests");
 
-vi.mock("../services/fetchAllLabTests", () => ({
-  fetchAllLabTests: vi
-    .fn()
-    .mockImplementation(() => buildLabTestsResponseMockData(3)),
-}));
-
-afterEach(() => {
-  vi.clearAllMocks();
+beforeEach(() => {
+  // Default sets a successful response from the lab_tests api
+  // You can overide this in individual tests
+  (useLabTests as Mock).mockImplementation(() => ({
+    data: buildLabTestsResponseMockData(3),
+    isSuccess: true,
+    isError: false,
+  }));
 });
 
 test("renders the page heading with the correct title", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
-  );
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   const heading = screen.getByRole("heading", {
     level: 2,
@@ -42,9 +42,7 @@ test("renders the page heading with the correct title", async () => {
 });
 
 test("renders the form with correct fields & elemments", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
-  );
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   expect(
     screen.getByRole("textbox", { name: /Panel Name/i }),
@@ -69,10 +67,24 @@ test("renders the form with correct fields & elemments", async () => {
   ).toBeInTheDocument();
 });
 
-test("should validate form fields are required", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
+test("renders an alert istead of the table when the lab_tests fetch fails", async () => {
+  (useLabTests as Mock).mockImplementation(() => ({
+    data: [],
+    isSuccess: false,
+    isError: true,
+  }));
+
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
+
+  expect(screen.queryByRole("table")).not.toBeInTheDocument();
+
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "There was a problem requesting lab tests.",
   );
+});
+
+test("should validate form fields are required", async () => {
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   const submitButton = screen.getByRole("button", { name: /Save Panel/i });
   await userEvent.click(submitButton);
@@ -91,9 +103,7 @@ test("should validate form fields are required", async () => {
 });
 
 test("should validate Panel Name Input is at least 4 characters", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
-  );
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   const panelNameInput = screen.getByRole("textbox", { name: /Panel Name/i });
   await userEvent.type(panelNameInput, "a");
@@ -107,9 +117,7 @@ test("should validate Panel Name Input is at least 4 characters", async () => {
 });
 
 test("should call the submit handler with valid form data", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
-  );
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   const panelNameInput = screen.getByRole("textbox", { name: /Panel Name/i });
   await userEvent.type(panelNameInput, "Test");
@@ -135,9 +143,7 @@ test("should call the submit handler with valid form data", async () => {
 });
 
 test("Show selected toggle button should filter table by selected biomarkers only", async () => {
-  await act(() =>
-    Promise.resolve(render(<NewPanel />, { wrapper: BrowserRouter })),
-  );
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
   expect(screen.getAllByRole("checkbox")).toHaveLength(2);
 

@@ -1,4 +1,8 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -16,17 +20,16 @@ import {
   PopoverTrigger,
   Select,
   SimpleGrid,
+  Skeleton,
   Text,
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
-import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 import { COLLECTION_METHODS, NEW_PANEL } from "../constants";
 import { updatePanelsAction } from "../services/createNewPanel";
-import { fetchAllLabTests } from "../services/fetchAllLabTests";
-import type { LabTestsResponseData } from "../types/LabTestsResponseData";
+import { useLabTests } from "../services/useLabTests";
 import type { Panel } from "../types/Panel";
 import { BiomarkersTable } from "./BiomarkersTable";
 import { PageHeader } from "./PageHeader";
@@ -38,11 +41,9 @@ const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
 };
 
 export function NewPanel() {
-  const { actions } = useStateMachine({ updatePanelsAction });
+  const { data, isSuccess, isError } = useLabTests();
 
-  const [labTestsList, setLabTestsList] = useState<
-    LabTestsResponseData["markers"] | []
-  >([]);
+  const { actions } = useStateMachine({ updatePanelsAction });
 
   const methods = useForm<Panel>();
 
@@ -54,30 +55,12 @@ export function NewPanel() {
   } = methods;
 
   const onSubmit = (data: Panel) => {
-    // isSubmitSuccessful = true after onSubmit has completed once
-    // To prevent multiple submits of the same valid form
+    // Prevent multiple submits of the same valid form
+    //  isSubmitSuccessful = true after onSubmit has completed once
     if (!isSubmitSuccessful) {
       actions.updatePanelsAction(data);
     }
   };
-
-  // TODO: Switch out for React-Query
-  // TODO: Add states for Loading + Failure to load
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const labTests = await fetchAllLabTests();
-
-        if (labTests && labTests.markers) {
-          setLabTestsList(labTests.markers);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchData().catch(console.error);
-  }, []);
 
   return (
     <Box padding="4">
@@ -152,7 +135,31 @@ export function NewPanel() {
             <FormErrorMessage marginBottom="3">
               {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
             </FormErrorMessage>
-            <BiomarkersTable biomarkersList={labTestsList} />
+
+            {isError ? (
+              <Alert
+                status="warning"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                padding="3"
+                borderRadius="md"
+              >
+                <AlertIcon />
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                  There was a problem requesting lab tests.
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                  Please try refreshing the page.
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Skeleton borderRadius="md" isLoaded={isSuccess}>
+                <BiomarkersTable biomarkersList={data?.markers} />
+              </Skeleton>
+            )}
           </FormControl>
 
           <Popover isOpen={isSubmitSuccessful}>
