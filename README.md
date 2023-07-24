@@ -29,9 +29,9 @@ See [Task Spec](./TASK.md) for more information.
 
 - Form tests (done)
 - Subit form data & save (done)
-- View panel list
+- View panel list (done)
 - Better Async Fetch For Biomarkers
-  - Loading + Error state
+  - Loading + Error state (done)
 - Write up README.md
 - Table search/ filter by column?
 
