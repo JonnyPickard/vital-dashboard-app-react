@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
-import { vi } from "vitest";
+import { Mock, vi } from "vitest";
 
 import { NEW_PANEL } from "../constants.ts";
 import { updatePanelsAction } from "../services/createNewPanel.ts";
+import { useLabTests } from "../services/useLabTests.ts";
 import { Wrapper } from "../tests/ProviderWrapper";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
 import { NewPanel } from "./NewPanel";
@@ -16,19 +17,17 @@ vi.mock("little-state-machine", () => ({
       actions: action,
     })),
 }));
-
 vi.mock("../services/createNewPanel");
+vi.mock("../services/useLabTests");
 
-vi.mock("../services/useLabTests", () => ({
-  useLabTests: vi.fn().mockImplementation(() => ({
+beforeEach(() => {
+  // Default sets a successful response from the lab_tests api
+  // You can overide this in individual tests
+  (useLabTests as Mock).mockImplementation(() => ({
     data: buildLabTestsResponseMockData(3),
     isSuccess: true,
     isError: false,
-  })),
-}));
-
-afterEach(() => {
-  vi.clearAllMocks();
+  }));
 });
 
 test("renders the page heading with the correct title", async () => {
@@ -66,6 +65,22 @@ test("renders the form with correct fields & elemments", async () => {
   expect(
     screen.getByRole("button", { name: /Save Panel/i }),
   ).toBeInTheDocument();
+});
+
+test("renders an alert istead of the table when the lab_tests fetch fails", async () => {
+  (useLabTests as Mock).mockImplementation(() => ({
+    data: [],
+    isSuccess: false,
+    isError: true,
+  }));
+
+  await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
+
+  expect(screen.queryByRole("table")).not.toBeInTheDocument();
+
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "There was a problem requesting lab tests.",
+  );
 });
 
 test("should validate form fields are required", async () => {
