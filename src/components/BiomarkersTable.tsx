@@ -15,12 +15,14 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { LabTestsResponseData } from "../types/LabTestsResponseData";
+import { TablePagination } from "./TablePagination";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -95,6 +97,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
     enableFilters: true,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
     globalFilterFn: selectedFilter,
@@ -120,7 +123,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
         {/* TODO: Make this nicer to use. Maybe Show: [all, selected] */}
         {globalFilter === "fitlerSelected" ? "Show all" : "Show selected"}
       </Button>
-      <TableContainer display="flex" borderRadius="md">
+      <TableContainer display="flex" borderRadius="md" marginBottom="4">
         <Table variant="simple">
           <Thead bg="gray.50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -156,6 +159,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
           </Tbody>
         </Table>
       </TableContainer>
+      <TablePagination table={table} />
     </>
   );
 }
