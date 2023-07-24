@@ -128,7 +128,9 @@ export function NewPanel() {
             isInvalid={Boolean(errors.biomarkers)}
             isReadOnly={isSubmitSuccessful}
           >
-            <FormLabel>Available Lab Tests</FormLabel>
+            <FormLabel id="new-panel-checkbox-label">
+              Available Lab Tests
+            </FormLabel>
             <FormHelperText marginBottom="4">
               The lab tests you would like to order.
             </FormHelperText>

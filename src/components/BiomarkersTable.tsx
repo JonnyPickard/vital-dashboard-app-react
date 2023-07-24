@@ -54,6 +54,8 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
         header: "",
         cell: ({ getValue, row }) => (
           <Checkbox
+            aria-labelledby="new-panel-checkbox-label"
+            id={`biomarkers-checkbox-${getValue()}-${row.index}`}
             value={getValue()}
             {...register("biomarkers", {
               required: "You must select at least one test to create a Panel.",
