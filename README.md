@@ -49,6 +49,17 @@ Use a mobile first data table with sticky search/ filters at bottom
 
 ## Usage
 
+## ENV Variables
+
+Vite on startup will look for a `.env.local` file in the root directory containing the following environment variables:
+
+```bash
+  VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers
+  VITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'
+```
+
+See [Task Spec](./TASK.md) for information on how to generate API keys.
+
 ### Testing
 
 <!-- TODO More info on libraries -->
