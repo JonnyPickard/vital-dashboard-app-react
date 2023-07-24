@@ -1,9 +1,9 @@
 import "little-state-machine";
 
-import type { ClientSidePanelList } from "./types/Panel";
+import type { Panel } from "./types/Panel";
 
 declare module "little-state-machine" {
   interface GlobalState {
-    panels: ClientSidePanelList.panels;
+    panels: Panel[];
   }
 }

@@ -1,7 +1,7 @@
 export type Panel = {
   panelName: string;
   collectionMethod: string;
-  biomarkers: { [name: string]: boolean };
+  biomarkers: string[];
 };
 
 /**

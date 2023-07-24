@@ -1,9 +1,19 @@
 import { GlobalState } from "little-state-machine";
 
+import { COLLECTION_METHODS } from "../constants";
 import { ClientSidePanelList, Panel } from "../types/Panel";
 
+// Note: This is just some example default data for display purposes
+const defaultPanels = [
+  {
+    panelName: "Lipid Panel",
+    collectionMethod: COLLECTION_METHODS.TEST_KIT,
+    biomarkers: ["17-oh-progesterone-lcms", "cortisol"],
+  },
+];
+
 export const clientSidePanelListStore: ClientSidePanelList = {
-  panels: [],
+  panels: defaultPanels,
 };
 
 export function updatePanelsAction(
@@ -12,6 +22,6 @@ export function updatePanelsAction(
 ): ClientSidePanelList {
   return {
     ...state,
-    panels: [payload],
+    panels: [...state.panels, payload],
   };
 }
