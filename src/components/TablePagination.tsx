@@ -22,6 +22,11 @@ export function TablePagination<T>(props: TablePaginationProps<T>) {
   const { table } = props;
   return (
     <Flex align="center" justifyContent="space-between">
+      <Text fontSize="sm">
+        Page {table.getState().pagination.pageIndex + 1} of{" "}
+        {table.getPageCount()}
+      </Text>
+
       <ButtonGroup gap="2">
         <IconButton
           size="sm"
@@ -55,11 +60,6 @@ export function TablePagination<T>(props: TablePaginationProps<T>) {
           isDisabled={!table.getCanNextPage()}
         />
       </ButtonGroup>
-
-      <Text fontSize="sm">
-        Page {table.getState().pagination.pageIndex + 1} of{" "}
-        {table.getPageCount()}
-      </Text>
 
       <Box>
         <Select

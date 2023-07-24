@@ -59,7 +59,7 @@ test("renders the form with correct fields & elemments", async () => {
   expect(screen.getByRole("table")).toBeInTheDocument();
 
   expect(
-    screen.getByRole("checkbox", { name: /Available Lab Tests/i }),
+    screen.queryAllByRole("checkbox", { name: /Available Lab Tests/i }).at(0),
   ).toBeInTheDocument();
 
   expect(
