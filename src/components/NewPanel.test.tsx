@@ -20,9 +20,11 @@ vi.mock("little-state-machine", () => ({
 vi.mock("../services/createNewPanel");
 
 vi.mock("../services/useLabTests", () => ({
-  useLabTests: vi
-    .fn()
-    .mockImplementation(() => ({ data: buildLabTestsResponseMockData(3) })),
+  useLabTests: vi.fn().mockImplementation(() => ({
+    data: buildLabTestsResponseMockData(3),
+    isSuccess: true,
+    isError: false,
+  })),
 }));
 
 afterEach(() => {
