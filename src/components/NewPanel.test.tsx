@@ -4,9 +4,10 @@ import { act } from "react-dom/test-utils";
 import { BrowserRouter } from "react-router-dom";
 import { vi } from "vitest";
 
+import { NEW_PANEL } from "../constants.ts";
 import { updatePanelsAction } from "../services/createNewPanel.ts";
 import { buildLabTestsResponseMockData } from "../tests/mocks/labTestsResponseMockData.ts";
-import { NEW_PANEL_NAME, NewPanel } from "./NewPanel";
+import { NewPanel } from "./NewPanel";
 
 vi.mock("little-state-machine", () => ({
   useStateMachine: vi
@@ -34,10 +35,10 @@ test("renders the page heading with the correct title", async () => {
 
   const heading = screen.getByRole("heading", {
     level: 2,
-    name: NEW_PANEL_NAME,
+    name: NEW_PANEL.NAME,
   });
 
-  expect(heading.textContent).toEqual(NEW_PANEL_NAME);
+  expect(heading.textContent).toEqual(NEW_PANEL.NAME);
 });
 
 test("renders the form with correct fields & elemments", async () => {
@@ -127,7 +128,7 @@ test("should call the submit handler with valid form data", async () => {
   expect(updatePanelsAction).toHaveBeenCalledWith(
     expect.objectContaining({
       biomarkers: ["17-oh-progesterone-lcms"],
-      collectionMethod: "test-kit",
+      collectionMethod: "test_kit",
       panelName: "Test",
     }),
   );

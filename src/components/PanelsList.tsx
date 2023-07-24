@@ -2,6 +2,8 @@ import {
   Box,
   Table,
   TableContainer,
+  Tag,
+  TagLabel,
   Tbody,
   Td,
   Th,
@@ -10,11 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
 
+import { PANELS_LIST } from "../constants";
 import { PageHeader } from "./PageHeader";
-
-export const PANELS_LIST_NAME = "Your Panels";
-export const PANELS_LIST_SUBTITLE =
-  "A list of all the Panels you have created.";
 
 export function PanelsList() {
   const { getState } = useStateMachine();
@@ -24,8 +23,8 @@ export function PanelsList() {
   return (
     <Box padding="4">
       <PageHeader
-        headingText={PANELS_LIST_NAME}
-        subtitleText={PANELS_LIST_SUBTITLE}
+        headingText={PANELS_LIST.NAME}
+        subtitleText={PANELS_LIST.SUBTITLE}
       />
       <TableContainer display="flex" borderRadius="10">
         <Table variant="simple">
@@ -41,9 +40,26 @@ export function PanelsList() {
               ({ panelName, collectionMethod, biomarkers }, i) => (
                 <Tr key={`${panelName}-${i}`}>
                   <Td>{panelName}</Td>
-                  <Td>{collectionMethod}</Td>
-                  {/* TODO: Workout nicer display of markers */}
-                  <Td>{biomarkers.slice(0, 1)}</Td>
+                  <Td>
+                    <Tag size="sm" colorScheme="red" borderRadius="full">
+                      <TagLabel>{collectionMethod}</TagLabel>
+                    </Tag>
+                  </Td>
+                  <Td>
+                    {/* NOTE: For now only showing max of 4 */}
+                    {biomarkers.slice(0, 4).map((biomarker, i) => (
+                      <Box marginBottom="2" key={`${biomarker}-${i}`}>
+                        <Tag
+                          key={`${biomarker}-${i}`}
+                          size="sm"
+                          colorScheme="blue"
+                          borderRadius="full"
+                        >
+                          <TagLabel>{biomarker}</TagLabel>
+                        </Tag>
+                      </Box>
+                    ))}
+                  </Td>
                 </Tr>
               ),
             )}
