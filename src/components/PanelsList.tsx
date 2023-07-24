@@ -18,8 +18,6 @@ import { PageHeader } from "./PageHeader";
 export function PanelsList() {
   const { getState } = useStateMachine();
 
-  console.log(getState().panels);
-
   return (
     <Box padding="4">
       <PageHeader
