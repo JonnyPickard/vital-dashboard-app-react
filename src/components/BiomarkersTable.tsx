@@ -38,7 +38,7 @@ type Biomarker = {
 };
 
 interface BiomarkersTableProps {
-  biomarkersList: LabTestsResponseData["markers"];
+  biomarkersList?: LabTestsResponseData["markers"];
 }
 
 const columnHelper = createColumnHelper<Biomarker>();
@@ -73,17 +73,17 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
     [register],
   );
 
-  const data = useMemo(
-    () =>
-      biomarkersList.map((biomarker) => ({
-        slug: biomarker.slug,
-        name: biomarker.name,
-        lab: `Labcorp ${biomarker.lab_id}`,
-        testCode: biomarker.lab_id,
-        price: biomarker.price,
-      })),
-    [biomarkersList],
-  );
+  const data = useMemo(() => {
+    return biomarkersList
+      ? biomarkersList.map((biomarker) => ({
+          slug: biomarker.slug,
+          name: biomarker.name,
+          lab: `Labcorp ${biomarker.lab_id}`,
+          testCode: biomarker.lab_id,
+          price: biomarker.price,
+        }))
+      : [];
+  }, [biomarkersList]);
 
   const selectedFilter: FilterFn<Biomarker> = (row) =>
     // Return true if the item checkbox has been checked & should be filtered in/out
@@ -118,7 +118,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
         {/* TODO: Make this nicer to use. Maybe Show: [all, selected] */}
         {globalFilter === "fitlerSelected" ? "Show all" : "Show selected"}
       </Button>
-      <TableContainer display="flex" borderRadius="10">
+      <TableContainer display="flex" borderRadius="md">
         <Table variant="simple">
           <Thead bg="gray.50">
             {table.getHeaderGroups().map((headerGroup) => (

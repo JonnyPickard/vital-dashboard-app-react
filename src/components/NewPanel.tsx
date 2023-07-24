@@ -1,4 +1,8 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -16,6 +20,7 @@ import {
   PopoverTrigger,
   Select,
   SimpleGrid,
+  Skeleton,
   Text,
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
@@ -36,7 +41,7 @@ const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
 };
 
 export function NewPanel() {
-  const { status, data, error, isFetching } = useLabTests();
+  const { data, isSuccess, isError } = useLabTests();
 
   const { actions } = useStateMachine({ updatePanelsAction });
 
@@ -130,13 +135,30 @@ export function NewPanel() {
             <FormErrorMessage marginBottom="3">
               {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
             </FormErrorMessage>
-            {/* TODO: Better loading/ error states */}
-            {status === "loading" ? (
-              "Loading..."
-            ) : status === "error" ? (
-              <span>Error: {error.message}</span>
+
+            {isError ? (
+              <Alert
+                status="warning"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                padding="3"
+                borderRadius="md"
+              >
+                <AlertIcon />
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                  There was a problem requesting lab tests.
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                  Please try refreshing the page.
+                </AlertDescription>
+              </Alert>
             ) : (
-              <BiomarkersTable biomarkersList={data!.markers} />
+              <Skeleton borderRadius="md" isLoaded={isSuccess}>
+                <BiomarkersTable biomarkersList={data?.markers} />
+              </Skeleton>
             )}
           </FormControl>
 

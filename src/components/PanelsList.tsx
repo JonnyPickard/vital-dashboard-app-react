@@ -24,7 +24,7 @@ export function PanelsList() {
         headingText={PANELS_LIST.NAME}
         subtitleText={PANELS_LIST.SUBTITLE}
       />
-      <TableContainer display="flex" borderRadius="10">
+      <TableContainer display="flex" borderRadius="md">
         <Table variant="simple">
           <Thead bg="gray.50">
             <Tr>
