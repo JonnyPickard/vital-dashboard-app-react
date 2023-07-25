@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   Flex,
@@ -6,6 +7,7 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -56,18 +58,22 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
     () => [
       columnHelper.accessor("slug", {
         enableColumnFilter: false,
+        maxSize: 2,
         header: "",
         cell: ({ getValue, row }) => (
-          <Checkbox
-            aria-labelledby="new-panel-checkbox-label"
-            id={`biomarkers-checkbox-${getValue()}-${row.index}`}
-            value={getValue()}
-            {...register("biomarkers", {
-              required: "You must select at least one test to create a Panel.",
-            })}
-            isChecked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          <Box>
+            <Checkbox
+              aria-labelledby="new-panel-checkbox-label"
+              id={`biomarkers-checkbox-${getValue()}-${row.index}`}
+              value={getValue()}
+              {...register("biomarkers", {
+                required:
+                  "You must select at least one test to create a Panel.",
+              })}
+              isChecked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          </Box>
         ),
       }),
       columnHelper.accessor("name", {
@@ -127,17 +133,23 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
         {globalFilter === "fitlerSelected" ? "Show all" : "Show selected"}
       </Button>
       <TableContainer display="flex" borderRadius="md" marginBottom="4">
-        <Table variant="simple">
+        <Table variant="simple" layout="fixed">
           <Thead bg="gray.50">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <Th key={header.id}>
+                  <Th
+                    key={header.id}
+                    // Used to lock checkbox column size from growing
+                    width={header.column.getSize() || "initial"}
+                  >
                     <Flex direction="column">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                      <Text marginBottom={2}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </Text>
                       {header.column.getCanFilter() && (
                         <Filter column={header.column} />
                       )}
@@ -153,7 +165,11 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                 <Tr key={row.id}>
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <Td key={cell.id}>
+                      <Td
+                        key={cell.id}
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),

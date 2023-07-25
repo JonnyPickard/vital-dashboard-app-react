@@ -15,7 +15,8 @@ export function Filter<T>({ column }: { column: Column<T, unknown> }) {
   );
 }
 
-// A debounced input react component
+// Borrowed + reworked from:
+//  https://github.com/TanStack/table/blob/main/examples/react/filters/src/main.tsx#L400
 function DebouncedInput({
   value: initialValue,
   onChange,
@@ -44,9 +45,11 @@ function DebouncedInput({
   return (
     <InputGroup>
       <InputLeftElement pointerEvents="none">
-        <SearchIcon color="gray.300" />
+        <SearchIcon color="gray.300" viewBox="0 0 40 40" boxSize="5" />
       </InputLeftElement>
       <Input
+        borderRadius="4"
+        size="sm"
         list={list}
         type="text"
         background="white"
