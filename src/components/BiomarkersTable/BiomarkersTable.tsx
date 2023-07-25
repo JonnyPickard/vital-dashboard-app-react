@@ -37,7 +37,7 @@ type Biomarker = {
   slug: string;
   name: string;
   lab: string;
-  testCode: number;
+  testCode: string;
   price: string;
 };
 
@@ -86,7 +86,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
           slug: biomarker.slug,
           name: biomarker.name,
           lab: `Labcorp ${biomarker.lab_id}`,
-          testCode: biomarker.lab_id,
+          testCode: biomarker.provider_id,
           price: biomarker.price,
         }))
       : [];
@@ -139,7 +139,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                         header.getContext(),
                       )}
                       {header.column.getCanFilter() && (
-                        <Filter column={header.column} table={table} />
+                        <Filter column={header.column} />
                       )}
                     </Flex>
                   </Th>

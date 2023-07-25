@@ -1,80 +1,17 @@
-import { Column, Table } from "@tanstack/react-table";
-import { InputHTMLAttributes, useEffect, useMemo, useState } from "react";
+import { SearchIcon } from "@chakra-ui/icons";
+import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { Column } from "@tanstack/react-table";
+import { InputHTMLAttributes, useEffect, useState } from "react";
 
-export function Filter({
-  column,
-  table,
-}: {
-  column: Column<any, unknown>;
-  table: Table<any>;
-}) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id);
-
+export function Filter<T>({ column }: { column: Column<T, unknown> }) {
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = useMemo(
-    () =>
-      typeof firstValue === "number"
-        ? []
-        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [column.getFacetedUniqueValues(), firstValue, column],
-  );
-
-  return typeof firstValue === "number" ? (
-    <div>
-      <div className="flex space-x-2">
-        <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-          value={(columnFilterValue as [number, number])?.[0] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [value, old?.[1]])
-          }
-          placeholder={`Min ${
-            column.getFacetedMinMaxValues()?.[0]
-              ? `(${column.getFacetedMinMaxValues()?.[0]})`
-              : ""
-          }`}
-          className="w-24 border shadow rounded"
-        />
-        <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-          value={(columnFilterValue as [number, number])?.[1] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [old?.[0], value])
-          }
-          placeholder={`Max ${
-            column.getFacetedMinMaxValues()?.[1]
-              ? `(${column.getFacetedMinMaxValues()?.[1]})`
-              : ""
-          }`}
-          className="w-24 border shadow rounded"
-        />
-      </div>
-      <div className="h-1" />
-    </div>
-  ) : (
-    <>
-      <datalist id={column.id + "list"}>
-        {sortedUniqueValues.slice(0, 5000).map((value: any) => (
-          <option value={value} key={value} />
-        ))}
-      </datalist>
-      <DebouncedInput
-        type="text"
-        value={(columnFilterValue ?? "") as string}
-        onChange={(value) => column.setFilterValue(value)}
-        placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="w-36 border shadow rounded"
-        list={column.id + "list"}
-      />
-      <div className="h-1" />
-    </>
+  return (
+    <DebouncedInput
+      value={(columnFilterValue ?? "") as string}
+      onChange={(value) => column.setFilterValue(value)}
+      list={column.id + "list"}
+    />
   );
 }
 
@@ -83,11 +20,12 @@ function DebouncedInput({
   value: initialValue,
   onChange,
   debounce = 500,
-  ...props
+  list,
 }: {
   value: string | number;
   onChange: (value: string | number) => void;
   debounce?: number;
+  list: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = useState(initialValue);
 
@@ -101,13 +39,21 @@ function DebouncedInput({
     }, debounce);
 
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [value, debounce, onChange]);
 
   return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <InputGroup>
+      <InputLeftElement pointerEvents="none">
+        <SearchIcon color="gray.300" />
+      </InputLeftElement>
+      <Input
+        list={list}
+        type="text"
+        background="white"
+        placeholder="Search"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </InputGroup>
   );
 }
