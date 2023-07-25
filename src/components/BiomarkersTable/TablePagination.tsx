@@ -7,9 +7,9 @@ import {
 import {
   Box,
   ButtonGroup,
-  Flex,
   IconButton,
   Select,
+  SimpleGrid,
   Text,
 } from "@chakra-ui/react";
 import { Table } from "@tanstack/react-table";
@@ -21,13 +21,18 @@ interface TablePaginationProps<T> {
 export function TablePagination<T>(props: TablePaginationProps<T>) {
   const { table } = props;
   return (
-    <Flex align="center" justifyContent="space-between">
-      <Text fontSize="sm">
+    <SimpleGrid
+      templateColumns="1fr 2fr 1fr"
+      spacing={4}
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Text fontSize="sm" textAlign="center">
         Page {table.getState().pagination.pageIndex + 1} of{" "}
         {table.getPageCount()}
       </Text>
 
-      <ButtonGroup gap="2">
+      <ButtonGroup justifyContent="center" gap="2">
         <IconButton
           size="sm"
           aria-label="Go to page 1"
@@ -63,6 +68,7 @@ export function TablePagination<T>(props: TablePaginationProps<T>) {
 
       <Box>
         <Select
+          borderRadius="md"
           size="sm"
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
@@ -76,6 +82,6 @@ export function TablePagination<T>(props: TablePaginationProps<T>) {
           ))}
         </Select>
       </Box>
-    </Flex>
+    </SimpleGrid>
   );
 }

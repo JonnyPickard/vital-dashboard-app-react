@@ -183,7 +183,9 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
           </Tbody>
         </Table>
       </TableContainer>
-      <TablePagination table={table} />
+      <Flex justify="end">
+        <TablePagination table={table} />
+      </Flex>
     </>
   );
 }
