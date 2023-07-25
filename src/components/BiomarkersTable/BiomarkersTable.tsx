@@ -132,7 +132,12 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
         {/* TODO: Make this nicer to use. Maybe Show: [all, selected] */}
         {globalFilter === "fitlerSelected" ? "Show all" : "Show selected"}
       </Button>
-      <TableContainer display="flex" borderRadius="md" marginBottom="4">
+      <TableContainer
+        marginBottom="4"
+        borderWidth="1px"
+        borderColor="gray.100"
+        borderRadius="md"
+      >
         <Table variant="simple" layout="fixed">
           <Thead bg="gray.50">
             {table.getHeaderGroups().map((headerGroup) => (
