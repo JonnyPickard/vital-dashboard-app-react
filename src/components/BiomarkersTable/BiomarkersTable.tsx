@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Flex,
   Table,
   TableContainer,
   Tbody,
@@ -21,7 +22,8 @@ import {
 import { useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import type { LabTestsResponseData } from "../types/LabTestsResponseData";
+import type { LabTestsResponseData } from "../../types/LabTestsResponseData";
+import { Filter } from "./ColumnFilter";
 import { TablePagination } from "./TablePagination";
 
 declare module "@tanstack/table-core" {
@@ -53,6 +55,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("slug", {
+        enableColumnFilter: false,
         header: "",
         cell: ({ getValue, row }) => (
           <Checkbox
@@ -130,10 +133,15 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
+                    <Flex direction="column">
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                      {header.column.getCanFilter() && (
+                        <Filter column={header.column} table={table} />
+                      )}
+                    </Flex>
                   </Th>
                 ))}
               </Tr>
