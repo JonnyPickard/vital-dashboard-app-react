@@ -51,6 +51,7 @@ function DebouncedInput({
         borderRadius="4"
         size="sm"
         list={list}
+        id={list}
         type="text"
         background="white"
         placeholder="Search"

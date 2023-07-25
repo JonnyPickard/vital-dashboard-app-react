@@ -57,7 +57,8 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("slug", {
-        enableColumnFilter: false,
+        filterFn: (row) => row.getIsSelected(),
+        // enableColumnFilter: false,
         maxSize: 2,
         header: "",
         cell: ({ getValue, row }) => (
@@ -109,14 +110,14 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
     getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
-    globalFilterFn: selectedFilter,
+    // globalFilterFn: selectedFilter,
     onGlobalFilterChange: setGlobalFilter,
     state: {
       globalFilter,
     },
-    filterFns: {
-      selected: selectedFilter,
-    },
+    // filterFns: {
+    //   selected: selectedFilter,
+    // },
   });
 
   return (
@@ -149,13 +150,28 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                     width={header.column.getSize() || "initial"}
                   >
                     <Flex direction="column">
-                      <Text marginBottom={2}>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </Text>
-                      {header.column.getCanFilter() && (
+                      {header.column.columnDef.header && (
+                        <Text marginBottom={2}>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </Text>
+                      )}
+                      {header.column.getCanFilter() && header.index === 0 ? (
+                        <Flex>
+                          <Checkbox
+                            id="toggle-show-selected"
+                            aria-label="Toggle show selected"
+                            backgroundColor="white"
+                            onChange={() => {
+                              globalFilter === "fitlerSelected"
+                                ? setGlobalFilter("")
+                                : setGlobalFilter("fitlerSelected");
+                            }}
+                          />
+                        </Flex>
+                      ) : (
                         <Filter column={header.column} />
                       )}
                     </Flex>
