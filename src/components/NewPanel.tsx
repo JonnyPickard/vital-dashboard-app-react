@@ -82,7 +82,7 @@ export function NewPanel() {
             <FormHelperText marginBottom="4">
               What you would like to call the Panel.
             </FormHelperText>
-            <FormErrorMessage marginBottom="3">
+            <FormErrorMessage marginBottom="4">
               {errors.panelName && errors.panelName.message}
             </FormErrorMessage>
             <Input
@@ -107,7 +107,7 @@ export function NewPanel() {
             <FormHelperText marginBottom="4">
               The test collection methodology you want to use.
             </FormHelperText>
-            <FormErrorMessage marginBottom="3">
+            <FormErrorMessage marginBottom="4">
               {errors.collectionMethod && errors.collectionMethod.message}
             </FormErrorMessage>
             <Select
@@ -134,7 +134,7 @@ export function NewPanel() {
             <FormHelperText marginBottom="4">
               The lab tests you would like to order.
             </FormHelperText>
-            <FormErrorMessage marginBottom="3">
+            <FormErrorMessage marginBottom="4">
               {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
             </FormErrorMessage>
 
@@ -164,13 +164,13 @@ export function NewPanel() {
             )}
           </FormControl>
 
-          <Popover isOpen={isSubmitSuccessful}>
+          <Popover placement="top">
             <PopoverTrigger>
               <Button type="submit" marginBottom="4">
                 Save Panel
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent marginLeft="4">
               <PopoverHeader
                 display="flex"
                 justifyContent="center"
