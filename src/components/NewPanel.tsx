@@ -76,7 +76,7 @@ export function NewPanel() {
           <FormControl
             marginBottom="6"
             isInvalid={Boolean(errors.panelName)}
-            isReadOnly={isSubmitSuccessful}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel>Panel Name</FormLabel>
             <FormHelperText marginBottom="4">
@@ -101,7 +101,7 @@ export function NewPanel() {
           <FormControl
             marginBottom="6"
             isInvalid={Boolean(errors.collectionMethod)}
-            isReadOnly={isSubmitSuccessful}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel>Collection Method</FormLabel>
             <FormHelperText marginBottom="4">
@@ -126,7 +126,7 @@ export function NewPanel() {
           <FormControl
             marginBottom="6"
             isInvalid={Boolean(errors.biomarkers)}
-            isReadOnly={isSubmitSuccessful}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel id="new-panel-checkbox-label">
               Available Lab Tests

@@ -145,3 +145,29 @@ Client Side Routing
 **Reasoning**: I didn't spend much time on this but I mainly used it to toggle bettween the `PanelsList` & `NewPanel` components. I think the actualy dashboard uses [NextJs](https://nextjs.org/) which would handle routing.
 
 ## Further Improvements
+
+### Panel Submission
+
+I currently just use a popover:
+
+![Success Popover](./docs/success-popover.png)
+
+However, I feel like a confirmation modal would provide a better user experience.
+
+e.g. "Do you wish to Save New Panel `<Panel Name>`"
+
+The modal would show: `Name`, `Collection Type` & `Biomarkers`.
+
+### Tooltips + Informative References
+
+As we are dealing with abstract concepts a lot e.g. a `Panel` I think there are a lot of situations where it would be nice to refer users to more information.
+
+For example:
+
+![More Information Reference](./docs/more-information-reference.png)
+
+It might be nice UX to have panel as a link to more information or have a tooltip explaining what it is.
+
+![Tooltip Example](./docs/example-tooltip.png)
+
+On the table `Toggle show selected` checkbox I have used a tooltip to show what this does. Column filter inputs and table pagination I also feel could benefit from this.
