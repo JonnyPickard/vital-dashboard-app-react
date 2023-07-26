@@ -52,14 +52,12 @@ test("renders the form with correct fields & elemments", async () => {
     screen.getByRole("combobox", { name: /Collection Method/i }),
   ).toBeInTheDocument();
 
-  expect(
-    screen.getByRole("button", { name: /Show selected/i }),
-  ).toBeInTheDocument();
-
   expect(screen.getByRole("table")).toBeInTheDocument();
 
   expect(
-    screen.queryAllByRole("checkbox", { name: /Available Lab Tests/i }).at(0),
+    screen.getByRole("checkbox", {
+      name: /Select 17-oh-progesterone-lcms test to add to Panel./i,
+    }),
   ).toBeInTheDocument();
 
   expect(
@@ -127,8 +125,11 @@ test("should call the submit handler with valid form data", async () => {
   });
   await userEvent.selectOptions(collectionMethodSelect, "Test Kit");
 
-  const checkboxes = screen.getAllByRole("checkbox");
-  await userEvent.click(checkboxes[0]);
+  await userEvent.click(
+    screen.getByRole("checkbox", {
+      name: /Select 17-oh-progesterone-lcms test to add to Panel./i,
+    }),
+  );
 
   const submitButton = screen.getByRole("button", { name: /Save Panel/i });
   await userEvent.click(submitButton);
@@ -142,34 +143,45 @@ test("should call the submit handler with valid form data", async () => {
   );
 });
 
-test("Show selected toggle button should filter table by selected biomarkers only", async () => {
+test("Show selected toggle checkbox should filter table by selected biomarkers only", async () => {
   await act(() => Promise.resolve(render(<NewPanel />, { wrapper: Wrapper })));
 
-  expect(screen.getAllByRole("checkbox")).toHaveLength(2);
-
-  await userEvent.click(screen.getAllByRole("checkbox")[0]);
+  expect(
+    screen.getByRole("checkbox", {
+      name: /Select 17-oh-progesterone-lcms test to add to Panel./i,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("checkbox", {
+      name: /Select abo-grouping test to add to Panel./i,
+    }),
+  ).toBeInTheDocument();
 
   await userEvent.click(
-    screen.getByRole("button", {
-      name: /Show selected/i,
+    screen.getByRole("checkbox", {
+      name: /Select 17-oh-progesterone-lcms test to add to Panel./i,
+    }),
+  );
+  await userEvent.click(
+    screen.getByRole("checkbox", {
+      name: /Toggle show selected/i,
     }),
   );
 
-  expect(screen.getAllByRole("checkbox")).toHaveLength(1);
-
   expect(
-    screen.queryByRole("button", {
-      name: /Show selected/i,
+    screen.queryByRole("checkbox", {
+      name: /Select abo-grouping test to add to Panel./i,
     }),
   ).not.toBeInTheDocument();
 
-  await userEvent.click(screen.getAllByRole("checkbox")[0]);
-
   await userEvent.click(
-    screen.getByRole("button", {
-      name: /Show all/i,
+    screen.getByRole("checkbox", {
+      name: /Toggle show selected/i,
     }),
   );
-
-  expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+  expect(
+    screen.getByRole("checkbox", {
+      name: /Select abo-grouping test to add to Panel./i,
+    }),
+  ).toBeInTheDocument();
 });

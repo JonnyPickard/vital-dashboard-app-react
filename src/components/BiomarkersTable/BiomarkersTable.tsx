@@ -9,6 +9,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from "@chakra-ui/react";
 import {
@@ -58,21 +59,25 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
       columnHelper.accessor("slug", {
         maxSize: 2,
         header: "",
-        cell: ({ getValue, row }) => (
-          <Box>
-            <Checkbox
-              aria-labelledby="new-panel-checkbox-label"
-              id={`biomarkers-checkbox-${getValue()}-${row.index}`}
-              value={getValue()}
-              {...register("biomarkers", {
-                required:
-                  "You must select at least one test to create a Panel.",
-              })}
-              isChecked={row.getIsSelected()}
-              onChange={row.getToggleSelectedHandler()}
-            />
-          </Box>
-        ),
+        cell: ({ getValue, row }) => {
+          const value = getValue();
+
+          return (
+            <Box>
+              <Checkbox
+                aria-label={`Select ${value} test to add to Panel.`}
+                id={`biomarkers-checkbox-${value}-${row.index}`}
+                value={value}
+                {...register("biomarkers", {
+                  required:
+                    "You must select at least one test to create a Panel.",
+                })}
+                isChecked={row.getIsSelected()}
+                onChange={row.getToggleSelectedHandler()}
+              />
+            </Box>
+          );
+        },
       }),
       columnHelper.accessor("name", {
         cell: (info) => info.getValue(),
@@ -152,12 +157,18 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                       )}
                       {header.column.getCanFilter() && header.index === 0 ? (
                         <Flex>
-                          <Checkbox
-                            id="toggle-show-selected"
-                            aria-label="Toggle show selected"
-                            backgroundColor="white"
-                            onChange={toggleSelected}
-                          />
+                          <Tooltip
+                            label="Toggle show selected"
+                            shouldWrapChildren
+                            hasArrow
+                          >
+                            <Checkbox
+                              id="toggle-show-selected"
+                              aria-label="Toggle show selected"
+                              backgroundColor="white"
+                              onChange={toggleSelected}
+                            />
+                          </Tooltip>
                         </Flex>
                       ) : (
                         <Filter column={header.column} />
@@ -169,26 +180,20 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <Td
-                        key={cell.id}
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </Td>
-                    );
-                  })}
-                </Tr>
-              );
-            })}
+            {table.getRowModel().rows.map((row) => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <Td key={cell.id} overflow="hidden" textOverflow="ellipsis">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Td>
+                  );
+                })}
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
