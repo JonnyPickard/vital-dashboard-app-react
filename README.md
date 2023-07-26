@@ -8,53 +8,6 @@ See [Task Spec](./TASK.md) for more information.
 
 > Note on git - I have left the commit history as is using merge commits so it's easier to understand my working process.
 
-## Caveats
-
-### General
-
-As I could have carried on working on this (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
-
-I mainly chose to focus on how New Panel creation could work and didn't spend as much time remaking existing features like the 'Your Panels' list.
-
-### Form Submit
-
-Due to the lack of a new panel creation endpoint I have done the bare basics & used a [little-state-machine](https://www.npmjs.com/package/little-state-machine) client side store to save panels with the following shape:
-
-```ts
-type Panel = {
-  panelName: string;
-  collectionMethod: string;
-  // Uses slug value at the moment
-  biomarkers: string[];
-};
-```
-
-**I made the following assumptions:**
-
-- The biomarker slug would be adequate as an id for constructing the new panel.
-- The back end would assign a unique ID + meta data etc.
-- The enpoint would allow for duplicate panel names so didn't add validation for unique name.
-
-Finally in order to view the saved panels list for the test I didn't use the `/v3/lab_tests/` endpoint or copy its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
-
-### Testing
-
-I could have done more rigorous testing & covered more of the App. I've done the bare basic unit tests to cover creating new panels which I feel offer the most value for the time taken.
-
-Given more time I would add more tests around table filtering behaviours & network conditions.
-
-## UX/ Designs
-
-### Test Catalog Selectable Table
-
-Table with radio buttons
-
-- [React Example: Row Selection](https://tanstack.com/table/v8/docs/examples/react/row-selection)
-
-Use a mobile first data table with sticky search/ filters at bottom
-
-- [Mobile Tables](https://css-tricks.com/responsive-data-tables/)
-
 ## Quickstart
 
 ### Install
@@ -93,7 +46,7 @@ Please replace `<Your EU Sandbox Key>` with a valid key. See [Task Spec](./TASK.
 npm run dev
 ```
 
-Uses [Vite Dev server](https://vitejs.dev/guide/cli.html#dev-server)
+Uses [Vite dev server](https://vitejs.dev/guide/cli.html#dev-server)
 
 ### Tests
 
@@ -116,6 +69,41 @@ This ensures business logic is covered without closely tieing tests to implement
 
 This is beneficial if you want to refactor implementation logic later on and usually results fewer tests to maintain.
 
+## Caveats
+
+### General
+
+As I could have carried on working on this (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
+
+I mainly chose to focus on how New Panel creation could work and didn't spend as much time remaking existing features like the 'Your Panels' list.
+
+### Form Submit
+
+Due to the lack of a new panel creation endpoint I have done the bare basics & used a [little-state-machine](https://www.npmjs.com/package/little-state-machine) client side store to save panels with the following shape:
+
+```ts
+type Panel = {
+  panelName: string;
+  collectionMethod: string;
+  // Uses slug value at the moment
+  biomarkers: string[];
+};
+```
+
+**I made the following assumptions:**
+
+- The biomarker slug would be adequate as an id for constructing the new panel.
+- The back end would assign a unique ID + meta data etc.
+- The enpoint would allow for duplicate panel names so didn't add validation for unique name.
+
+Finally in order to view the saved panels list for the test I didn't use the `/v3/lab_tests/` endpoint or copy its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
+
+### Testing
+
+I could have done more rigorous testing & covered more of the App. I've done the bare basic unit tests to cover creating new panels which I feel offer the most value for the time taken.
+
+Given more time I would add more tests around table filtering behaviours & network conditions.
+
 ## 3rd Party Libraries
 
 ### [Vite](https://vitejs.dev/)
@@ -130,12 +118,30 @@ Async state management & data fetching.
 
 **Reasoning**: Has easy to use handlers for most of the different scenarios during data fetching e.g. retries, caching, request cancellation, pagination & infinite scroll.
 
-### Chakra-UI
+I believe for this app you would be able not use client side storage & just use this library.
 
-<!-- TODO -->
+### [Chakra-UI](https://chakra-ui.com/)
 
-### React-Hook-Form
+React component library.
 
-<!-- TODO -->
+**Reasoning**: It is already used in the dashboard & made it easier to match my code with current design standards. It also saved a lot of time vs making the components + logic. Finally, it has built in accessibility features which also saved time.
+
+### [React-Hook-Form](https://www.react-hook-form.com/)
+
+Form Hooks: "Performant, flexible and extensible forms with easy-to-use validation".
+
+**Reasoning**: Very easy to use and lightweight form hooks. It saved me time working out custom form state logic + validation. It also should be easy to extend in the future if required. Finally, the [dev tools](https://www.react-hook-form.com/dev-tools/) are really nice to work with allowing you to see form state with ease.
+
+### [TanStack Table](https://tanstack.com/table/v8)
+
+Table Hooks: "Headless UI for building powerful tables & datagrids".
+
+**Reasoning**: Very easy to build quite advanced tables with column filters, row selection & pagination. This saved a significant amount of time over manually writing the logic.
+
+### [React-Router](https://reactrouter.com/en/main)
+
+Client Side Routing
+
+**Reasoning**: I didn't spend much time on this but I mainly used it to toggle bettween the `PanelsList` & `NewPanel` components. I think the actualy dashboard uses [NextJs](https://nextjs.org/) which would handle routing.
 
 ## Further Improvements
