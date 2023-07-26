@@ -24,7 +24,12 @@ export function PanelsList() {
         headingText={PANELS_LIST.NAME}
         subtitleText={PANELS_LIST.SUBTITLE}
       />
-      <TableContainer display="flex" borderRadius="md">
+      <TableContainer
+        marginBottom="4"
+        borderWidth="1px"
+        borderColor="gray.100"
+        borderRadius="md"
+      >
         <Table variant="simple">
           <Thead bg="gray.50">
             <Tr>
