@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Checkbox,
   Flex,
   Table,
@@ -57,8 +56,6 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("slug", {
-        filterFn: (row) => row.getIsSelected(),
-        // enableColumnFilter: false,
         maxSize: 2,
         header: "",
         cell: ({ getValue, row }) => (
@@ -99,6 +96,12 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
       : [];
   }, [biomarkersList]);
 
+  const toggleSelected = () => {
+    globalFilter === "fitlerSelected"
+      ? setGlobalFilter("")
+      : setGlobalFilter("fitlerSelected");
+  };
+
   const selectedFilter: FilterFn<Biomarker> = (row) =>
     // Return true if the item checkbox has been checked & should be filtered in/out
     row.getIsSelected();
@@ -110,29 +113,18 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
     getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
-    // globalFilterFn: selectedFilter,
     onGlobalFilterChange: setGlobalFilter,
     state: {
       globalFilter,
     },
-    // filterFns: {
-    //   selected: selectedFilter,
-    // },
+    globalFilterFn: selectedFilter,
+    filterFns: {
+      selected: selectedFilter,
+    },
   });
 
   return (
     <>
-      <Button
-        marginBottom="4"
-        onClick={() => {
-          globalFilter === "fitlerSelected"
-            ? setGlobalFilter("")
-            : setGlobalFilter("fitlerSelected");
-        }}
-      >
-        {/* TODO: Make this nicer to use. Maybe Show: [all, selected] */}
-        {globalFilter === "fitlerSelected" ? "Show all" : "Show selected"}
-      </Button>
       <TableContainer
         marginBottom="4"
         borderWidth="1px"
@@ -164,11 +156,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                             id="toggle-show-selected"
                             aria-label="Toggle show selected"
                             backgroundColor="white"
-                            onChange={() => {
-                              globalFilter === "fitlerSelected"
-                                ? setGlobalFilter("")
-                                : setGlobalFilter("fitlerSelected");
-                            }}
+                            onChange={toggleSelected}
                           />
                         </Flex>
                       ) : (
