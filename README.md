@@ -6,71 +6,103 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
-> Note on git - I have left the commit history clean using merge commits so it's easier to understand my working process.
+> Note on git - I have left the commit history as is using merge commits so it's easier to understand my working process.
 
-## Rough Plan
+## Quickstart
 
-- Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
-- New Panel Form
-  - Field 1.(done)
-    - Name: Name
-    - Component: Input
-  - Field 2. (done)
-    - Name: Collection Method
-    - Component: Select
-  - Field 3. (MVP version done)
-    - Name: Select Tests
-    - Component: Test Catalog Table
-      - w/ Search + Filters + Add to Panel CTA Button
+### Install
 
-## TODO
+```bash
+npm install
+```
 
-### MVP
-
-- Form tests (done)
-- Subit form data & save (done)
-- View panel list (done)
-- Better Async Fetch For Biomarkers
-  - Loading + Error state (done)
-- Write up README.md
-- Table search/ filter by column?
-
-## UX/ Designs
-
-### Test Catalog Selectable Table
-
-Table with radio buttons
-
-- [React Example: Row Selection](https://tanstack.com/table/v8/docs/examples/react/row-selection)
-
-Use a mobile first data table with sticky search/ filters at bottom
-
-- [Mobile Tables](https://css-tricks.com/responsive-data-tables/)
-
-## Usage
-
-## ENV Variables
+### Environment
 
 Vite on startup will look for a `.env.local` file in the root directory containing the following environment variables:
 
 ```bash
-  VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers
-  VITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'
+# .env.local
+
+VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers
+VITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'
 ```
 
-See [Task Spec](./TASK.md) for information on how to generate API keys.
+To generate the `.env.local` file you can run the following:
 
-### Testing
+```bash
+# Generate .env.local
 
-<!-- TODO More info on libraries -->
+touch .env.local
+echo "VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers\nVITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'" > .env.local
+```
+
+Please replace `<Your EU Sandbox Key>` with a valid key. See [Task Spec](./TASK.md) for information on how to generate API keys.
+
+### Start
+
+```bash
+# Start development server
+
+npm run dev
+```
+
+Uses [Vite dev server](https://vitejs.dev/guide/cli.html#dev-server)
+
+### Tests
+
+```bash
+# Run unit tests
+
+npm test
+```
 
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-```sh
-  # run unit tests
+I normally will aim to test using an outside-in approach following User behaviour. For example:
 
-  npm test
+1. User fills out form.
+2. User submits form.
+3. Validation is successfull.
+4. Submit success message is shown.
+
+This ensures business logic is covered without closely tieing tests to implementation details.
+
+This is beneficial if you want to refactor implementation logic later on and usually results fewer tests to maintain.
+
+## Caveats
+
+### General
+
+As I could have carried on working on this (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
+
+I mainly chose to focus on how New Panel creation could work and didn't spend as much time remaking existing features like the 'Your Panels' list.
+
+### Form Submit
+
+Due to the lack of a new panel creation endpoint I have done the bare basics & used a [little-state-machine](https://www.npmjs.com/package/little-state-machine) client side store to save panels with the following shape:
+
+```ts
+type Panel = {
+  panelName: string;
+  collectionMethod: string;
+  // Uses slug value at the moment
+  biomarkers: string[];
+};
 ```
+
+**I made the following assumptions:**
+
+- The biomarker slug would be adequate as an id for constructing the new panel.
+- The back end would assign a unique ID + meta data etc.
+- The enpoint would allow for duplicate panel names so didn't add validation for unique name.
+
+Finally in order to view the saved panels list for the test I didn't use the `/v3/lab_tests/` endpoint or copy its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
+
+### Testing
+
+I could have done more rigorous testing & covered more of the App. I've done the bare basic unit tests to cover creating new panels which I feel offer the most value for the time taken.
+
+Given more time I would add more tests around table filtering behaviours & network conditions.
 
 ## 3rd Party Libraries
 
@@ -86,10 +118,56 @@ Async state management & data fetching.
 
 **Reasoning**: Has easy to use handlers for most of the different scenarios during data fetching e.g. retries, caching, request cancellation, pagination & infinite scroll.
 
-### Chakra-UI
+I believe for this app you would be able not use client side storage & just use this library.
 
-<!-- TODO -->
+### [Chakra-UI](https://chakra-ui.com/)
 
-### React-Hook-Form
+React component library.
 
-<!-- TODO -->
+**Reasoning**: It is already used in the dashboard & made it easier to match my code with current design standards. It also saved a lot of time vs making the components + logic. Finally, it has built in accessibility features which also saved time.
+
+### [React-Hook-Form](https://www.react-hook-form.com/)
+
+Form Hooks: "Performant, flexible and extensible forms with easy-to-use validation".
+
+**Reasoning**: Very easy to use and lightweight form hooks. It saved me time working out custom form state logic + validation. It also should be easy to extend in the future if required. Finally, the [dev tools](https://www.react-hook-form.com/dev-tools/) are really nice to work with allowing you to see form state with ease.
+
+### [TanStack Table](https://tanstack.com/table/v8)
+
+Table Hooks: "Headless UI for building powerful tables & datagrids".
+
+**Reasoning**: Very easy to build quite advanced tables with column filters, row selection & pagination. This saved a significant amount of time over manually writing the logic.
+
+### [React-Router](https://reactrouter.com/en/main)
+
+Client Side Routing
+
+**Reasoning**: I didn't spend much time on this but I mainly used it to toggle bettween the `PanelsList` & `NewPanel` components. I think the actualy dashboard uses [NextJs](https://nextjs.org/) which would handle routing.
+
+## Further Improvements
+
+### Panel Submission
+
+I currently just use a popover:
+
+![Success Popover](./docs/success-popover.png)
+
+However, I feel like a confirmation modal would provide a better user experience.
+
+e.g. "Do you wish to Save New Panel `<Panel Name>`"
+
+The modal would show: `Name`, `Collection Type` & `Biomarkers`.
+
+### Tooltips + Informative References
+
+As we are dealing with abstract concepts a lot e.g. a `Panel` I think there are a lot of situations where it would be nice to refer users to more information.
+
+For example:
+
+![More Information Reference](./docs/more-information-reference.png)
+
+It might be nice UX to have panel as a link to more information or have a tooltip explaining what it is.
+
+![Tooltip Example](./docs/example-tooltip.png)
+
+On the table `Toggle show selected` checkbox I have used a tooltip to show what this does. Column filter inputs and table pagination I also feel could benefit from this.

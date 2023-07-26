@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </Routes>
           </BrowserRouter>
         </ChakraProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </StateMachineProvider>
   </React.StrictMode>,
