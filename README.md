@@ -12,7 +12,7 @@ See [Task Spec](./TASK.md) for more information.
 
 ### General
 
-As I could have carried on working on this for a while (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
+As I could have carried on working on this (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
 
 I mainly chose to focus on how New Panel creation could work and didn't spend as much time remaking existing features like the 'Your Panels' list.
 
@@ -35,7 +35,7 @@ type Panel = {
 - The back end would assign a unique ID + meta data etc.
 - The enpoint would allow for duplicate panel names so didn't add validation for unique name.
 
-Finally in order to view the saved panels list for the test I haven't used the `/v3/lab_tests/` endpoint nor copied its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
+Finally in order to view the saved panels list for the test I didn't use the `/v3/lab_tests/` endpoint or copy its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
 
 ## UX/ Designs
 
@@ -51,7 +51,13 @@ Use a mobile first data table with sticky search/ filters at bottom
 
 ## Usage
 
-## ENV Variables
+### Quickstart
+
+```bash
+# Install project dependencies
+
+npm install
+```
 
 Vite on startup will look for a `.env.local` file in the root directory containing the following environment variables:
 
@@ -62,13 +68,19 @@ Vite on startup will look for a `.env.local` file in the root directory containi
 
 See [Task Spec](./TASK.md) for information on how to generate API keys.
 
+```bash
+# Start the development server
+
+npm run dev
+```
+
 ### Testing
 
 <!-- TODO More info on libraries -->
 
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-```sh
+```bash
   # run unit tests
 
   npm test
