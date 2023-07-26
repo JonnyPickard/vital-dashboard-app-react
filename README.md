@@ -6,34 +6,36 @@ Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
 
 See [Task Spec](./TASK.md) for more information.
 
-> Note on git - I have left the commit history clean using merge commits so it's easier to understand my working process.
+> Note on git - I have left the commit history as is using merge commits so it's easier to understand my working process.
 
-## Rough Plan
+## Caveats
 
-- Test Catalog + Panel list already exist so just focus on a Panel Creation page to add the most value.
-- New Panel Form
-  - Field 1.(done)
-    - Name: Name
-    - Component: Input
-  - Field 2. (done)
-    - Name: Collection Method
-    - Component: Select
-  - Field 3. (MVP version done)
-    - Name: Select Tests
-    - Component: Test Catalog Table
-      - w/ Search + Filters + Add to Panel CTA Button
+### General
 
-## TODO
+As I could have carried on working on this for a while (I still have plenty of ideas for [further improvements](#further-improvements)), I aimed to provide the most value in areas that don't currently exist.
 
-### MVP
+I mainly chose to focus on how New Panel creation could work and didn't spend as much time remaking existing features like the 'Your Panels' list.
 
-- Form tests (done)
-- Subit form data & save (done)
-- View panel list (done)
-- Better Async Fetch For Biomarkers
-  - Loading + Error state (done)
-- Write up README.md
-- Table search/ filter by column?
+### Form Submit
+
+Due to the lack of a new panel creation endpoint I have done the bare basics & used a [little-state-machine](https://www.npmjs.com/package/little-state-machine) client side store to save panels with the following shape:
+
+```ts
+type Panel = {
+  panelName: string;
+  collectionMethod: string;
+  // Uses slug value at the moment
+  biomarkers: string[];
+};
+```
+
+**I made the following assumptions:**
+
+- The biomarker slug would be adequate as an id for constructing the new panel.
+- The back end would assign a unique ID + meta data etc.
+- The enpoint would allow for duplicate panel names so didn't add validation for unique name.
+
+Finally in order to view the saved panels list for the test I haven't used the `/v3/lab_tests/` endpoint nor copied its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
 
 ## UX/ Designs
 
@@ -93,3 +95,5 @@ Async state management & data fetching.
 ### React-Hook-Form
 
 <!-- TODO -->
+
+## Further Improvements
