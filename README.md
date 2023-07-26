@@ -37,6 +37,12 @@ type Panel = {
 
 Finally in order to view the saved panels list for the test I didn't use the `/v3/lab_tests/` endpoint or copy its data structure. This was mainly because trying to mimic the behavior of this not yet existing endpoint didn't seem like a good use of time.
 
+### Testing
+
+I could have done more rigorous testing & covered more of the App. I've done the bare basic unit tests to cover creating new panels which I feel offer the most value for the time taken.
+
+Given more time I would add more tests around table filtering behaviours & network conditions.
+
 ## UX/ Designs
 
 ### Test Catalog Selectable Table
@@ -49,42 +55,66 @@ Use a mobile first data table with sticky search/ filters at bottom
 
 - [Mobile Tables](https://css-tricks.com/responsive-data-tables/)
 
-## Usage
+## Quickstart
 
-### Quickstart
+### Install
 
 ```bash
-# Install project dependencies
-
 npm install
 ```
+
+### Environment
 
 Vite on startup will look for a `.env.local` file in the root directory containing the following environment variables:
 
 ```bash
-  VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers
-  VITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'
+# .env.local
+
+VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers
+VITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'
 ```
 
-See [Task Spec](./TASK.md) for information on how to generate API keys.
+To generate the `.env.local` file you can run the following:
 
 ```bash
-# Start the development server
+# Generate .env.local
+
+touch .env.local
+echo "VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers\nVITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'" > .env.local
+```
+
+Please replace `<Your EU Sandbox Key>` with a valid key. See [Task Spec](./TASK.md) for information on how to generate API keys.
+
+### Start
+
+```bash
+# Start development server
 
 npm run dev
 ```
 
-### Testing
+Uses [Vite Dev server](https://vitejs.dev/guide/cli.html#dev-server)
 
-<!-- TODO More info on libraries -->
+### Tests
+
+```bash
+# Run unit tests
+
+npm test
+```
 
 Unit tests are set up with [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-```bash
-  # run unit tests
+I normally will aim to test using an outside-in approach following User behaviour. For example:
 
-  npm test
-```
+1. User fills out form.
+2. User submits form.
+3. Validation is successfull.
+4. Submit success message is shown.
+
+This ensures business logic is covered without closely tieing tests to implementation details.
+
+This is beneficial if you want to refactor implementation logic later on and usually results fewer tests to maintain.
 
 ## 3rd Party Libraries
 
