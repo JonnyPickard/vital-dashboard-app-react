@@ -17,6 +17,8 @@ const extendedTheme = extendTheme(theme);
 
 createStore(clientSidePanelListStore);
 
+const { BASE_URL } = import.meta.env;
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <StateMachineProvider>
@@ -24,9 +26,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <ChakraProvider theme={extendedTheme}>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route path="/panels/create" element={<NewPanel />} />
-                <Route path="/panels" element={<PanelsList />} />
+              <Route path={BASE_URL} element={<Layout />}>
+                <Route
+                  path={`${BASE_URL}/panels/create`}
+                  element={<NewPanel />}
+                />
+                <Route path={`${BASE_URL}/panels`} element={<PanelsList />} />
               </Route>
             </Routes>
           </BrowserRouter>

@@ -11,9 +11,9 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [react()],
-    base: "vital-dashboard-app-react",
+    base: "/vital-dashboard-app-react",
     server: {
-      open: "/panels/create",
+      open: "/vital-dashboard-app-react/panels/create",
       proxy: {
         "/lab_tests/markers": {
           target: VITE_VITAL_LABS_API_URL,

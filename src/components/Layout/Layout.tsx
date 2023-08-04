@@ -3,6 +3,8 @@ import { Outlet, Link as ReactRouterLink } from "react-router-dom";
 
 import { PanelIcon } from "../../assets/Icons";
 
+const { BASE_URL } = import.meta.env;
+
 export function Layout() {
   return (
     <Box>
@@ -13,7 +15,7 @@ export function Layout() {
               display="flex"
               alignItems="center"
               as={ReactRouterLink}
-              to="/panels/create"
+              to={`${BASE_URL}/panels/create`}
             >
               <PanelIcon marginRight="3" /> Create Panel
             </Link>
@@ -23,7 +25,7 @@ export function Layout() {
               display="flex"
               alignItems="center"
               as={ReactRouterLink}
-              to="/panels"
+              to={`${BASE_URL}/panels`}
             >
               <PanelIcon marginRight="3" /> Your Panels
             </Link>
