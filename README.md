@@ -1,12 +1,8 @@
-# Vital Frontend Task
+# Vital API Dashboard - New Panel Creation
 
 ## About
 
-Vital frontend tech test. To enable Clients to order Biomarker-tests for Users.
-
-See [Task Spec](./TASK.md) for more information.
-
-> Note on git - I have left the commit history as is using merge commits so it's easier to understand my working process.
+Example React App for creating: "New Panels". Panels enable Clients to order groups of Biomarker-tests for Users using the [Vital API Dashboard](https://app.tryvital.io/).
 
 ## Quickstart
 
@@ -36,7 +32,7 @@ touch .env.local
 echo "VITE_VITAL_LABS_API_URL=https://api.sandbox.eu.tryvital.io/v3/lab_tests/markers\nVITE_VITAL_LABS_API_KEY='<Your EU Sandbox Key>'" > .env.local
 ```
 
-Please replace `<Your EU Sandbox Key>` with a valid key. See [Task Spec](./TASK.md) for information on how to generate API keys.
+Please replace `<Your EU Sandbox Key>` with a valid key. You can generate required keys on the [Vital API Dashboard](https://app.tryvital.io/).
 
 ### Start
 
@@ -167,7 +163,3 @@ For example:
 ![More Information Reference](./docs/more-information-reference.png)
 
 It might be nice UX to have panel as a link to more information or have a tooltip explaining what it is.
-
-![Tooltip Example](./docs/example-tooltip.png)
-
-On the table `Toggle show selected` checkbox I have used a tooltip to show what this does. Column filter inputs and table pagination I also feel could benefit from this.

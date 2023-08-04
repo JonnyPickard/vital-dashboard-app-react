@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useStateMachine } from "little-state-machine";
 
-import { PANELS_LIST } from "../constants";
-import { PageHeader } from "./PageHeader";
+import { PANELS_LIST, PANELS_LIST_TABLE as TABLE } from "../../constants";
+import { PageHeader } from "../Layout";
 
 export function PanelsList() {
   const { getState } = useStateMachine();
@@ -33,9 +33,9 @@ export function PanelsList() {
         <Table variant="simple">
           <Thead bg="gray.50">
             <Tr>
-              <Th>LAB TEST</Th>
-              <Th>SAMPLE TYPE</Th>
-              <Th>BIOMARKERS</Th>
+              <Th>{TABLE.HEADER_PANEL_NAME}</Th>
+              <Th>{TABLE.HEADER_SAMPLE_TYPE}</Th>
+              <Th>{TABLE.HEADER_BIOMARKERS}</Th>
             </Tr>
           </Thead>
           <Tbody>

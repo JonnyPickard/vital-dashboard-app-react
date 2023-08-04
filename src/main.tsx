@@ -3,13 +3,12 @@ import { StateMachineProvider, createStore } from "little-state-machine";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { Layout } from "./components/Layout.tsx";
-import { NewPanel } from "./components/NewPanel.tsx";
-import { PanelsList } from "./components/PanelsList.tsx";
-import { clientSidePanelListStore } from "./services/createNewPanel.ts";
+import { Layout } from "./components/Layout";
+import { NewPanel } from "./components/NewPanel";
+import { PanelsList } from "./components/PanelsList";
+import { clientSidePanelListStore } from "./services";
 import { theme } from "./theme.ts";
 
 const queryClient = new QueryClient();
@@ -32,7 +31,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </Routes>
           </BrowserRouter>
         </ChakraProvider>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </StateMachineProvider>
   </React.StrictMode>,

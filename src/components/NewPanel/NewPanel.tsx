@@ -5,6 +5,7 @@ import {
   AlertTitle,
   Box,
   Button,
+  Divider,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -27,18 +28,16 @@ import { useStateMachine } from "little-state-machine";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-import { COLLECTION_METHODS, NEW_PANEL } from "../constants";
-import { updatePanelsAction } from "../services/createNewPanel";
-import { useLabTests } from "../services/useLabTests";
-import type { Panel } from "../types/Panel";
+import {
+  COLLECTION_METHODS,
+  NEW_PANEL_FORM_TEXT as FORM_TEXT,
+  NEW_PANEL,
+} from "../../constants";
+import { updatePanelsAction, useLabTests } from "../../services";
+import type { Panel } from "../../types/Panel";
+import { PageHeader } from "../Layout";
 import { BiomarkersTable } from "./BiomarkersTable";
-import { PageHeader } from "./PageHeader";
-
-const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-  }
-};
+import { preventEnterSubmit, submitSuccessDescription } from "./utils";
 
 export function NewPanel() {
   const { data, isSuccess, isError } = useLabTests();
@@ -78,21 +77,21 @@ export function NewPanel() {
             isInvalid={Boolean(errors.panelName)}
             isDisabled={isSubmitSuccessful}
           >
-            <FormLabel>Panel Name</FormLabel>
+            <FormLabel>{FORM_TEXT.INPUT_1_LABEL}</FormLabel>
             <FormHelperText marginBottom="4">
-              What you would like to call the Panel.
+              {FORM_TEXT.INPUT_1_HELPER}
             </FormHelperText>
             <FormErrorMessage marginBottom="4">
               {errors.panelName && errors.panelName.message}
             </FormErrorMessage>
             <Input
-              placeholder="e.g. Lipid Panel"
+              placeholder={FORM_TEXT.INPUT_1_PLACEHOLDER}
               type="text"
               {...register("panelName", {
-                required: "Panel Name is required.",
+                required: FORM_TEXT.INPUT_1_VALIDATION_REQUIRED,
                 minLength: {
                   value: 4,
-                  message: "Panel Name must be at least 4 characters.",
+                  message: FORM_TEXT.INPUT_1_VALIDATION_MIN_LENGTH,
                 },
               })}
             />
@@ -103,22 +102,24 @@ export function NewPanel() {
             isInvalid={Boolean(errors.collectionMethod)}
             isDisabled={isSubmitSuccessful}
           >
-            <FormLabel>Collection Method</FormLabel>
+            <FormLabel>{FORM_TEXT.SELECT_2_LABEL}</FormLabel>
             <FormHelperText marginBottom="4">
-              The test collection methodology you want to use.
+              {FORM_TEXT.SELECT_2_HELPER}
             </FormHelperText>
             <FormErrorMessage marginBottom="4">
               {errors.collectionMethod && errors.collectionMethod.message}
             </FormErrorMessage>
             <Select
-              placeholder="Select option"
+              placeholder={FORM_TEXT.SELECT_2_PLACEHOLDER}
               {...register("collectionMethod", {
-                required: "Collection Method is required.",
+                required: FORM_TEXT.SELECT_2_VALIDATION_REQUIRED,
               })}
             >
-              <option value={COLLECTION_METHODS.TEST_KIT}>Test Kit</option>
+              <option value={COLLECTION_METHODS.TEST_KIT}>
+                {COLLECTION_METHODS.TEST_KIT_TITLE}
+              </option>
               <option value={COLLECTION_METHODS.AT_HOME_PHLEBOTOMY}>
-                At Home Phlebotomy
+                {COLLECTION_METHODS.AT_HOME_PHLEBOTOMY_TITLE}
               </option>
             </Select>
           </FormControl>
@@ -128,11 +129,9 @@ export function NewPanel() {
             isInvalid={Boolean(errors.biomarkers)}
             isDisabled={isSubmitSuccessful}
           >
-            <FormLabel id="new-panel-checkbox-label">
-              Available Lab Tests
-            </FormLabel>
+            <FormLabel>{FORM_TEXT.TABLE_3_LABEL}</FormLabel>
             <FormHelperText marginBottom="4">
-              The lab tests you would like to order.
+              {FORM_TEXT.TABLE_3_HELPER}
             </FormHelperText>
             <FormErrorMessage marginBottom="4">
               {errors?.biomarkers && errors?.biomarkers?.message?.toString()}
@@ -151,10 +150,10 @@ export function NewPanel() {
               >
                 <AlertIcon />
                 <AlertTitle mt={4} mb={1} fontSize="lg">
-                  There was a problem requesting lab tests.
+                  {FORM_TEXT.TABLE_3_FETCH_ALERT_TITLE}
                 </AlertTitle>
                 <AlertDescription maxWidth="sm">
-                  Please try refreshing the page.
+                  {FORM_TEXT.TABLE_3_FETCH_ALERT_DESCRIPTION}
                 </AlertDescription>
               </Alert>
             ) : (
@@ -164,54 +163,57 @@ export function NewPanel() {
             )}
           </FormControl>
 
-          <Popover placement="top">
-            <PopoverTrigger>
-              <Button type="submit" marginBottom="4">
-                Save Panel
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent marginLeft="4">
-              <PopoverHeader
-                display="flex"
-                justifyContent="center"
-                fontWeight="semibold"
-              >
-                Panel Saved
-              </PopoverHeader>
-              <PopoverArrow />
-              <PopoverBody
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                padding="3"
-              >
-                <Text fontSize="sm" fontWeight="medium" textAlign="center">
-                  New Panel '{getValues("panelName")}' was created sucessfully!
-                </Text>
-              </PopoverBody>
-              <PopoverFooter display="flex" justifyContent="center">
-                <SimpleGrid columns={2} spacing="4">
-                  <Link
-                    fontWeight="medium"
-                    color="blue.600"
-                    as={ReactRouterLink}
-                    to="/panels/create"
-                    reloadDocument
-                  >
-                    Create More?
-                  </Link>
-                  <Link
-                    fontWeight="medium"
-                    color="blue.600"
-                    as={ReactRouterLink}
-                    to="/panels"
-                  >
-                    View Panels?
-                  </Link>
-                </SimpleGrid>
-              </PopoverFooter>
-            </PopoverContent>
-          </Popover>
+          <Box>
+            <Divider marginBottom="6" />
+            <Popover placement="top">
+              <PopoverTrigger>
+                <Button type="submit" marginBottom="4" colorScheme="teal">
+                  {FORM_TEXT.SUBMIT_BUTTON}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent marginLeft="4">
+                <PopoverHeader
+                  display="flex"
+                  justifyContent="center"
+                  fontWeight="semibold"
+                >
+                  {FORM_TEXT.SUBMIT_SUCCESS_HEADER}
+                </PopoverHeader>
+                <PopoverArrow />
+                <PopoverBody
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  padding="3"
+                >
+                  <Text fontSize="sm" fontWeight="medium" textAlign="center">
+                    {submitSuccessDescription(getValues("panelName"))}
+                  </Text>
+                </PopoverBody>
+                <PopoverFooter display="flex" justifyContent="center">
+                  <SimpleGrid columns={2} spacing="4">
+                    <Link
+                      fontWeight="medium"
+                      color="blue.600"
+                      as={ReactRouterLink}
+                      to="/panels/create"
+                      reloadDocument
+                    >
+                      {FORM_TEXT.SUBMIT_SUCCESS_LINK_CREATE_MORE}
+                    </Link>
+                    <Link
+                      fontWeight="medium"
+                      color="blue.600"
+                      as={ReactRouterLink}
+                      to="/panels"
+                    >
+                      {FORM_TEXT.SUBMIT_SUCCESS_LINK_VIEW_PANELS}
+                    </Link>
+                  </SimpleGrid>
+                </PopoverFooter>
+              </PopoverContent>
+            </Popover>
+          </Box>
         </form>
       </FormProvider>
     </Box>

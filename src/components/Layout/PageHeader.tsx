@@ -14,7 +14,6 @@ export function PageHeader({ headingText, subtitleText }: PageHeaderProps) {
       <Text marginTop="2" fontSize="sm" fontWeight="medium" color="text.400">
         {subtitleText}
       </Text>
-
       <Divider marginTop="3 " />
     </Flex>
   );

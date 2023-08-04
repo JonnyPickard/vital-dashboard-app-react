@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   Flex,
   Table,
@@ -9,7 +10,6 @@ import {
   Text,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from "@chakra-ui/react";
 import {
@@ -24,7 +24,9 @@ import {
 import { useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import type { LabTestsResponseData } from "../../types/LabTestsResponseData";
+import { NEW_PANEL_FORM_TEXT as FORM_TEXT } from "../../../constants";
+import type { LabTestsResponseData } from "../../../types/LabTestsResponseData";
+import { biomarkerCheckboxLabel } from "../utils";
 import { Filter } from "./ColumnFilter";
 import { TablePagination } from "./TablePagination";
 
@@ -59,18 +61,18 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
       columnHelper.accessor("slug", {
         maxSize: 2,
         header: "",
+        enableColumnFilter: false,
         cell: ({ getValue, row }) => {
           const value = getValue();
 
           return (
             <Box>
               <Checkbox
-                aria-label={`Select ${value} test to add to Panel.`}
+                aria-label={biomarkerCheckboxLabel(value)}
                 id={`biomarkers-checkbox-${value}-${row.index}`}
                 value={value}
                 {...register("biomarkers", {
-                  required:
-                    "You must select at least one test to create a Panel.",
+                  required: FORM_TEXT.TABLE_3_VALIDATION_REQUIRED,
                 })}
                 isChecked={row.getIsSelected()}
                 onChange={row.getToggleSelectedHandler()}
@@ -155,22 +157,7 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
                           )}
                         </Text>
                       )}
-                      {header.column.getCanFilter() && header.index === 0 ? (
-                        <Flex>
-                          <Tooltip
-                            label="Toggle show selected"
-                            shouldWrapChildren
-                            hasArrow
-                          >
-                            <Checkbox
-                              id="toggle-show-selected"
-                              aria-label="Toggle show selected"
-                              backgroundColor="white"
-                              onChange={toggleSelected}
-                            />
-                          </Tooltip>
-                        </Flex>
-                      ) : (
+                      {header.column.getCanFilter() && (
                         <Filter column={header.column} />
                       )}
                     </Flex>
@@ -197,7 +184,12 @@ export function BiomarkersTable({ biomarkersList }: BiomarkersTableProps) {
           </Tbody>
         </Table>
       </TableContainer>
-      <Flex justify="end">
+      <Flex justify="space-between">
+        <Button size="sm" marginRight="4" onClick={toggleSelected}>
+          {globalFilter === "fitlerSelected"
+            ? FORM_TEXT.FILTER_SHOW_ALL
+            : FORM_TEXT.FILTER_SHOW_SELECTED}
+        </Button>
         <TablePagination table={table} />
       </Flex>
     </>

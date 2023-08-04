@@ -1,7 +1,7 @@
 import { Box, Divider, Link, List, ListItem } from "@chakra-ui/react";
 import { Outlet, Link as ReactRouterLink } from "react-router-dom";
 
-import { PanelIcon } from "../assets/Icons";
+import { PanelIcon } from "../../assets/Icons";
 
 export function Layout() {
   return (
