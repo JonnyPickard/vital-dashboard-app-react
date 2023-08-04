@@ -1,5 +1,7 @@
 # Vital API Dashboard - New Panel Creation
 
+View the static site [here](https://jonnypickard.github.io/vital-dashboard-app-react/panels/create).
+
 ## About
 
 Example React App for creating: "New Panels". Panels enable Clients to order groups of Biomarker-tests for Users using the [Vital API Dashboard](https://app.tryvital.io/).
