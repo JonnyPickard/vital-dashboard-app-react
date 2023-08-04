@@ -4,7 +4,11 @@ View the static site [here](https://jonnypickard.github.io/vital-dashboard-app-r
 
 ## About
 
-Example React App for creating: "New Panels". Panels enable Clients to order groups of Biomarker-tests for Users using the [Vital API Dashboard](https://app.tryvital.io/).
+For the [Vital Health API](https://tryvital.io/).
+
+Example React App for creating: "New Panels". Panels enable Clients to order groups of Biomarker-tests for Users, using the [Vital API Dashboard](https://app.tryvital.io/).
+
+<img alt="App Screenshot" src="./docs/app-screenshot.png" width="500">
 
 ## Quickstart
 
@@ -148,7 +152,7 @@ Client Side Routing
 
 I currently just use a popover:
 
-![Success Popover](./docs/success-popover.png)
+<img alt="Success Popover" src="./docs/success-popover.png" width="500">
 
 However, I feel like a confirmation modal would provide a better user experience.
 
@@ -162,6 +166,6 @@ As we are dealing with abstract concepts a lot e.g. a `Panel` I think there are 
 
 For example:
 
-![More Information Reference](./docs/more-information-reference.png)
+<img alt="More Information Reference" src="./docs/more-information-reference.png" width="500">
 
 It might be nice UX to have panel as a link to more information or have a tooltip explaining what it is.
