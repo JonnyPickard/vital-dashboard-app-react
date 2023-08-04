@@ -11,6 +11,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [react()],
+    base: "vital-dashboard-app-react",
     server: {
       open: "/panels/create",
       proxy: {
