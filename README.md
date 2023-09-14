@@ -1,6 +1,6 @@
 # Vital API Dashboard - New Panel Creation
 
-View the static site [here](https://jonnypickard.github.io/vital-dashboard-app-react/panels/create).
+View the static site [here](https://jonnypickard.github.io/vital-dashboard-app-react).
 
 ## About
 
